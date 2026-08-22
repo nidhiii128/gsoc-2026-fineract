@@ -31,7 +31,7 @@
 |James Dailey, Aman Mittal
 
 |*Reviewer*
-|Alex Vidakovic
+|Alexander Vidakovic
 
 |*Organization*
 |Apache Software Foundation
