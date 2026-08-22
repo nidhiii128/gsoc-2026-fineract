@@ -1,8 +1,8 @@
-name: Deploy AsciiDoc Site
+name: Deploy GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -19,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -35,21 +34,16 @@ jobs:
 
       - name: Build site
         run: |
-          mkdir -p _site
-          asciidoctor index.adoc -o _site/index.html
+          mkdir _site
+          asciidoctor index.adoc -D _site
 
-          if [ -d images ]; then
-            cp -r images _site/
-          fi
-
-          if [ -d assets ]; then
-            cp -r assets _site/
-          fi
+          cp -r images _site 2>/dev/null || true
+          cp -r assets _site 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./_site
+          path: _site
 
   deploy:
     environment:
