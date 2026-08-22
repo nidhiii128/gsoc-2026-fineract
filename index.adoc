@@ -28,7 +28,7 @@
 |Nidhi Bhawari
 
 |*Mentor*
-|Alex Vidakovic
+|Aman Mittal, Alex Vidakovic
 
 |*Organization*
 |Apache Software Foundation
