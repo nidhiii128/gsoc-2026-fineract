@@ -1,0 +1,138 @@
+= Problem Statement
+
+== Background
+
+Apache Fineract has evolved over many years into a comprehensive core banking platform with hundreds of REST endpoints supporting diverse banking operations such as client management, loans, savings, accounting, calendars, scheduling, and many other financial services.
+
+Historically, almost every write operation in the system followed a common processing pattern based on the `JsonCommand` abstraction. Incoming HTTP requests were converted into a generic command object containing the raw JSON payload together with contextual information such as the authenticated user, entity identifiers, and request metadata. Business services then manually extracted values from this generic object and executed the corresponding operation.
+
+This architecture successfully supported Apache Fineract for many years. However, as the project continued to grow, several limitations became increasingly apparent. These limitations affected maintainability, readability, compile-time safety, and long-term evolution of the codebase.
+
+The New Command Processing Infrastructure was introduced to address these architectural challenges while providing a modern, scalable foundation for future development.
+
+== Legacy Command Processing Flow
+
+The legacy architecture followed a generalized execution flow.
+
+----
+HTTP Request
+      │
+      ▼
+ REST API Resource
+      │
+      ▼
+ JsonCommand
+ (Generic JSON Wrapper)
+      │
+      ▼
+ Business Service
+      │
+      ├── Parse JSON manually
+      ├── Validate fields
+      ├── Convert data types
+      ├── Execute business logic
+      └── Build generic response
+      │
+      ▼
+CommandProcessingResult
+      │
+      ▼
+HTTP Response
+----
+
+Although this approach functioned correctly, responsibility for request parsing, validation, and business execution was tightly coupled inside service implementations.
+
+== Challenges with the Legacy Approach
+
+=== 1. Generic Request Representation
+
+Every write operation received the same generic `JsonCommand` object regardless of the business operation being performed.
+
+Instead of working with meaningful domain models, service implementations had to repeatedly extract individual values from JSON using helper methods.
+
+[source,java]
+----
+String name = command.stringValueOfParameterNamed("name");
+Long officeId = command.longValueOfParameterNamed("officeId");
+Boolean active = command.booleanPrimitiveValueOfParameterNamed("active");
+----
+
+Because the request remained untyped throughout the processing pipeline, the compiler could not verify whether required fields were present or whether the extracted values matched the expected business model.
+
+=== 2. Manual Validation
+
+Validation logic was scattered across multiple services.
+
+Developers were responsible for manually checking request fields before executing business logic.
+
+Typical validation included:
+
+* Required field checks
+* Null validation
+* Numeric validation
+* Business rule validation
+* String length validation
+* Date validation
+
+Since validation was implemented manually, different endpoints often followed different validation styles, increasing maintenance effort and reducing consistency across the codebase.
+
+=== 3. Limited Compile-Time Safety
+
+Because requests were represented as generic JSON, many programming errors could only be detected during execution.
+
+Examples included:
+
+* Missing request parameters
+* Incorrect parameter names
+* Invalid type conversions
+* Unexpected null values
+
+These issues could not be identified by the compiler and instead surfaced only during runtime or testing.
+
+=== 4. Tight Coupling of Responsibilities
+
+Service implementations were responsible for multiple concerns simultaneously.
+
+A single service method often had to:
+
+* Parse incoming JSON
+* Validate request data
+* Retrieve the authenticated user
+* Execute business logic
+* Construct response objects
+
+This violated the principle of separation of concerns and made service implementations larger and more difficult to understand.
+
+=== 5. Generic Response Model
+
+Most write operations returned a generic `CommandProcessingResult`.
+
+Although flexible, this response type exposed little semantic information about the operation that had been performed.
+
+Different business operations frequently returned the same response type despite representing entirely different workflows.
+
+This reduced API clarity and complicated client code generation.
+
+=== 6. Difficult API Evolution
+
+Introducing new request fields or modifying existing APIs required updates across multiple layers because parsing logic was embedded inside business services.
+
+This increased the effort required to evolve REST APIs while maintaining backward compatibility.
+
+== Architectural Goals
+
+To overcome these limitations, Apache Fineract introduced a new typed command processing architecture with the following goals:
+
+* Strongly typed request and response models.
+* Compile-time validation of request structures.
+* Clear separation between API, command handling, and business logic.
+* Centralized command dispatching.
+* Reduced manual JSON parsing.
+* Cleaner service interfaces.
+* Improved readability and maintainability.
+* Easier generation of API clients.
+* Better long-term extensibility.
+
+Rather than replacing the entire command infrastructure at once, the migration strategy focuses on incrementally modernizing individual REST endpoints while preserving existing functionality and ensuring backward compatibility.
+
+This incremental approach enables continuous architectural improvement without disrupting production deployments or requiring large-scale changes to the existing codebase.
