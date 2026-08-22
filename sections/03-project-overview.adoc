@@ -1,0 +1,125 @@
+= Project Overview
+
+== Project Information
+
+[cols="1,3",options="header"]
+|===
+|Item
+|Details
+
+|Project
+|New Command Processing Infrastructure
+
+|Organization
+|Apache Software Foundation
+
+|Project Repository
+|Apache Fineract
+
+|Program
+|Google Summer of Code 2026
+
+|Contributor
+|Nidhi Bhawari
+
+|Mentor
+|Alex Vidakovic
+|===
+
+== Abstract
+
+The objective of this Google Summer of Code project was to migrate Apache Fineract's existing REST write endpoints from the legacy command processing mechanism to the new typed Command Processing Infrastructure.
+
+Historically, write operations in Apache Fineract relied on a generic `JsonCommand` object that encapsulated incoming request data as untyped JSON. Individual service implementations were responsible for extracting fields, performing validation, and executing the corresponding business logic. While this approach had served the project for many years, it resulted in repetitive parsing logic, limited compile-time validation, loosely typed APIs, and increasing maintenance complexity as the codebase evolved.
+
+To address these limitations, Apache Fineract introduced a new Command Query Responsibility Segregation (CQRS)-based command framework. Instead of passing generic JSON throughout the application, every write operation is represented by strongly typed request and response objects together with dedicated command handlers. Validation is performed using Jakarta Bean Validation annotations before business logic is executed, allowing services to operate entirely on validated domain objects.
+
+The migration strategy adopted by the Apache Fineract community is incremental. Rather than replacing the entire command framework at once, individual REST endpoints are migrated independently while ensuring complete backward compatibility and preserving existing functionality.
+
+My work during Google Summer of Code 2026 focused on implementing these migrations across multiple functional modules of Apache Fineract while following the architectural guidelines established for the new framework.
+
+== Objectives
+
+The primary objectives of this project were:
+
+* Migrate existing REST write endpoints to the typed command infrastructure.
+* Replace generic `JsonCommand` usage with strongly typed request DTOs.
+* Introduce dedicated response models for migrated APIs.
+* Implement typed `Command<T>` classes for each operation.
+* Create command handlers responsible for dispatching business operations.
+* Update REST resources to use the new command dispatcher.
+* Remove obsolete legacy command wrapper implementations wherever applicable.
+* Maintain complete integration test compatibility.
+* Preserve existing business behaviour while modernizing the internal architecture.
+
+== Scope of Contributions
+
+During the coding period, I contributed migrations across several business modules within Apache Fineract, including:
+
+* Group Management
+* Calendar
+* Job Scheduler
+* Client Address
+* Client Identifier
+* Family Member
+
+These migrations collectively covered create, update, delete, and state-transition operations depending on the module.
+
+Each migration followed a consistent implementation pattern that included:
+
+* Request DTO creation
+* Response DTO creation
+* Typed command implementation
+* Command handler implementation
+* REST resource migration
+* Service interface updates
+* Service implementation updates
+* Validation migration
+* Integration test updates
+* Removal of legacy infrastructure
+
+== High-Level Migration Workflow
+
+Every migrated endpoint followed the same architectural flow:
+
+....
+REST Request
+        │
+        ▼
+Typed Request DTO
+        │
+        ▼
+Command<T>
+        │
+        ▼
+Command Dispatcher
+        │
+        ▼
+Command Handler
+        │
+        ▼
+Business Service
+        │
+        ▼
+Typed Response DTO
+        │
+        ▼
+HTTP Response
+....
+
+This standardized execution flow significantly improves readability, maintainability, and compile-time safety compared to the legacy command processing approach.
+
+== Deliverables
+
+The major deliverables produced during this project include:
+
+* Multiple production-ready pull requests submitted to Apache Fineract.
+* Migration of numerous REST write endpoints to the new command framework.
+* New typed request and response models.
+* Dedicated command handlers for migrated operations.
+* Updated REST resources using the command dispatcher.
+* Service layer refactoring to eliminate legacy command usage.
+* Comprehensive unit and integration test updates.
+* Documentation describing the migration approach and implementation.
+
+The work completed during Google Summer of Code contributes directly to Apache Fineract's long-term architectural modernization initiative and establishes reusable migration patterns for future contributors working on the remaining legacy endpoints.
