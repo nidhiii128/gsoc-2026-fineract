@@ -11,3 +11,26 @@ Unlike many academic projects, this work was carried out in a large-scale open s
 During the twelve-week coding period, I contributed multiple pull requests across several Fineract modules, migrating legacy APIs to the new typed command infrastructure. These migrations introduced strongly typed request and response models, centralized command handling, improved validation, and cleaner separation between API and business logic while remaining consistent with the architectural direction of Apache Fineract.
 
 This document serves as the official work product for my Google Summer of Code 2026 project. It documents the motivation behind the project, the existing architecture, the new command processing framework, the implementation details of my contributions, challenges encountered during development, testing and validation performed, project outcomes, and future work planned for the ongoing migration effort.
+
+[cols="1,1,1,1"]
+|===
+|Duration |Organization |Mentor |Project
+
+|12 Weeks
+|Apache Software Foundation
+|Aman Mittal, Alex Vidakovic
+|New Command Processing Infrastructure
+|===
+
+[cols="1,1,1,1"]
+|===
+|Pull Requests
+|Endpoints Migrated
+|Modules
+|Tests
+
+|12
+|20+
+|6
+|40+
+|===
