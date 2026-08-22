@@ -1,7 +1,54 @@
 = Google Summer of Code 2026
+:author: Nidhi Bhawari
+:revnumber: 1.0
+:toc:
+:toclevels: 3
+:sectnums:
+:icons: font
+:source-highlighter: rouge
+:imagesdir: images
+
+[.text-center]
+****
+= New Command Processing Infrastructure
 
 Apache Fineract
 
+Google Summer of Code 2026
+
+Author::
 Nidhi Bhawari
 
-Testing GitHub Pages.
+Mentor::
+Alex Vidakovic
+****
+
+include::sections/01-introduction.adoc[]
+
+include::sections/02-about-fineract.adoc[]
+
+include::sections/03-project-overview.adoc[]
+
+include::sections/04-problem-statement.adoc[]
+
+include::sections/05-existing-architecture.adoc[]
+
+include::sections/06-new-command-processing.adoc[]
+
+include::sections/07-my-contributions.adoc[]
+
+include::sections/08-implementation.adoc[]
+
+include::sections/09-testing.adoc[]
+
+include::sections/10-challenges.adoc[]
+
+include::sections/11-demo.adoc[]
+
+include::sections/12-results.adoc[]
+
+include::sections/13-future-work.adoc[]
+
+include::sections/14-lessons-learned.adoc[]
+
+include::sections/15-acknowledgements.adoc[]
