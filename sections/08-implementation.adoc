@@ -1,0 +1,201 @@
+= Implementation Details
+
+This chapter presents the implementation work completed during Google Summer of Code 2026. The objective of every contribution was to migrate existing REST write endpoints from Apache Fineract's legacy command processing mechanism to the new typed Command Processing Infrastructure while preserving existing functionality and maintaining compatibility with the rest of the system.
+
+Rather than implementing isolated changes, each migration followed the common architectural pattern described in the previous chapter. This consistency reduced implementation complexity, simplified code reviews, and established a repeatable migration strategy for future contributors.
+
+== Modules Migrated
+
+During the coding period, migrations were completed across multiple Apache Fineract modules.
+
+[cols="1,1,2",options="header"]
+|===
+|Module
+|Operations
+|Purpose
+
+|Group
+|Create, Update, Delete, State Commands
+|Manage group lifecycle operations.
+
+|Calendar
+|Create, Update, Delete
+|Manage calendar resources.
+
+|Job Scheduler
+|Update, Execute
+|Support scheduling infrastructure.
+
+|Client Address
+|Create
+|Manage client address information.
+
+|Client Identifier
+|Create, Update, Delete
+|Manage client identification records.
+
+|Family Member
+|Create, Update, Delete
+|Manage family member relationships.
+|===
+
+Each migration reused the same architectural building blocks while adapting them to the business requirements of the respective module.
+
+== Migration Components
+
+Every migrated endpoint introduced a consistent set of implementation artifacts.
+
+Typical additions included:
+
+* Request DTO
+* Response DTO
+* Typed Command
+* Command Handler
+* Updated REST Resource
+* Updated Service Interface
+* Updated Service Implementation
+* Validation Updates
+* Integration Tests
+
+This standardized structure ensures that contributors working on different modules follow the same implementation approach.
+
+== Request DTOs
+
+Each migrated endpoint introduced a strongly typed request model representing the expected HTTP payload.
+
+Responsibilities of request DTOs include:
+
+* representing request fields,
+* declaring validation constraints,
+* documenting API contracts,
+* providing compile-time type safety.
+
+Validation is expressed declaratively using Jakarta Bean Validation annotations rather than manually inside service implementations.
+
+Typical validation annotations include:
+
+[source,java]
+----
+@NotNull
+@NotBlank
+@Positive
+@Valid
+----
+
+This significantly reduces validation boilerplate and improves readability.
+
+== Response DTOs
+
+Instead of returning the generic `CommandProcessingResult`, each operation now exposes its own response model.
+
+Typical response classes include:
+
+* GroupCreateResponse
+* CalendarUpdateResponse
+* ClientIdentifierDeleteResponse
+
+Dedicated response models provide:
+
+* stronger API documentation,
+* improved generated client SDKs,
+* operation-specific semantics,
+* compile-time type safety.
+
+== Typed Commands
+
+Every migrated operation introduced a dedicated command class extending the generic `Command<T>` abstraction.
+
+Example structure:
+
+[source,java]
+----
+public class GroupCreateCommand
+        extends Command<GroupCreateRequest> {
+}
+----
+
+Commands encapsulate validated request data and are dispatched by the central `CommandDispatcher`.
+
+Importantly, commands contain no business logic.
+
+== Command Handlers
+
+Command handlers represent the execution layer of the new framework.
+
+Each handler processes one command type and delegates business execution to the corresponding service.
+
+Typical responsibilities include:
+
+* receiving validated commands,
+* invoking business services,
+* returning typed responses.
+
+This architecture keeps handlers lightweight while preserving a clean separation between infrastructure and domain logic.
+
+== REST Resource Changes
+
+REST resources were updated to integrate with the new dispatcher.
+
+After migration, REST resources primarily perform three tasks:
+
+. receive HTTP requests,
+. dispatch typed commands,
+. return typed responses.
+
+This significantly reduces the amount of orchestration logic previously embedded within REST resources.
+
+== Service Refactoring
+
+Business services were updated to receive typed request objects rather than generic `JsonCommand` instances.
+
+This change eliminated manual JSON extraction and allowed services to operate directly on validated domain models.
+
+As a result, service implementations became:
+
+* shorter,
+* easier to understand,
+* easier to test,
+* focused exclusively on business behaviour.
+
+== Legacy Cleanup
+
+Migration also involved removing obsolete infrastructure that was no longer required.
+
+Examples include:
+
+* legacy command wrapper registrations,
+* unused helper methods,
+* deprecated service methods,
+* obsolete command handlers.
+
+Removing outdated infrastructure is an important part of the migration because it prevents architectural duplication and reduces future maintenance effort.
+
+== Consistent Migration Workflow
+
+Every endpoint migration followed the same implementation sequence.
+
+----
+Request DTO
+      │
+      ▼
+Response DTO
+      │
+      ▼
+Typed Command
+      │
+      ▼
+Command Handler
+      │
+      ▼
+REST Resource
+      │
+      ▼
+Service Layer
+      │
+      ▼
+Integration Tests
+----
+
+Following a consistent workflow across all migrated modules simplified development, reduced review effort, and established a repeatable pattern for future contributors.
+
+The next section presents the module-specific implementation details and highlights notable technical challenges encountered during the migration process.
