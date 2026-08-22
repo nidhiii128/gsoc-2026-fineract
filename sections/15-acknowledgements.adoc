@@ -1,0 +1,53 @@
+= Acknowledgements
+
+The successful completion of this Google Summer of Code project would not have been possible without the guidance, support, and contributions of many individuals and organizations. I would like to sincerely thank everyone who made this experience both technically rewarding and personally enriching.
+
+== Google Summer of Code
+
+I would like to express my gratitude to Google Summer of Code for providing students and open-source communities with the opportunity to collaborate on meaningful software projects.
+
+The program offers a unique environment where contributors can work on production-grade software while learning directly from experienced open-source developers. Participating in GSoC has been an invaluable learning experience that has strengthened both my technical abilities and my appreciation for open-source collaboration.
+
+== Apache Software Foundation
+
+I am grateful to the Apache Software Foundation for maintaining an open, welcoming, and collaborative environment for contributors.
+
+Apache's commitment to community-driven development, transparency, and high engineering standards creates an excellent ecosystem for learning and contributing to open-source software.
+
+== Apache Fineract Community
+
+I would like to thank the entire Apache Fineract community for their continuous support throughout the program.
+
+The discussions on GitHub, Jira, mailing lists, and community channels provided valuable insights into the project's architecture and development practices. The openness of the community and the willingness of contributors to review code, answer questions, and share their knowledge made the contribution process both productive and enjoyable.
+
+Working with a mature open-source project demonstrated the importance of collaboration, thoughtful code reviews, and maintaining high-quality engineering standards.
+
+== Mentor
+
+I would like to express my sincere gratitude to my mentor, *Alex Vidakovic*, for his guidance throughout Google Summer of Code 2026.
+
+His technical feedback, architectural insights, and detailed code reviews significantly improved both my implementation and my understanding of Apache Fineract's long-term direction.
+
+Rather than focusing solely on producing working code, his reviews consistently emphasized maintainability, architectural consistency, clean design, and long-term sustainability. These discussions helped me develop a deeper appreciation for software architecture and open-source engineering practices.
+
+I am grateful for his patience, encouragement, and continuous support throughout the project.
+
+== Contributors and Reviewers
+
+I would also like to thank the Apache Fineract contributors who reviewed pull requests, participated in technical discussions, and helped maintain the quality of the project.
+
+Their suggestions and feedback were invaluable in refining the implementation and ensuring that each contribution aligned with the project's standards.
+
+== Personal Reflection
+
+Google Summer of Code 2026 has been one of the most valuable learning experiences of my academic journey.
+
+Contributing to Apache Fineract allowed me to work on a large-scale production system, collaborate with experienced open-source developers, and gain practical experience in software architecture, code reviews, testing, debugging, and continuous integration.
+
+The knowledge and experience gained during this program will continue to influence my future contributions to open-source software and my growth as a software engineer.
+
+== Final Note
+
+I am thankful to everyone who contributed to making this project a success.
+
+I hope that the work completed during this project, together with the accompanying documentation, will be useful to future Apache Fineract contributors as the migration towards the New Command Processing Infrastructure continues.
