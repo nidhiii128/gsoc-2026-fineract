@@ -1,0 +1,194 @@
+= Module-wise Contributions
+
+This chapter summarizes the implementation work completed across the various Apache Fineract modules during Google Summer of Code 2026. Although each module addressed different business functionality, every migration followed the same architectural principles introduced by the New Command Processing Infrastructure.
+
+The primary objective was to replace the legacy JsonCommand-based execution model with strongly typed commands, request models, response models, and dedicated command handlers while preserving existing business behaviour and API compatibility.
+
+== Group Module
+
+The Group module represented one of the largest migration efforts completed during the project. Multiple endpoints responsible for managing the lifecycle of groups were migrated to the new typed command infrastructure.
+
+The migration included:
+
+* Create Group
+* Update Group
+* Delete Group
+* Activate Group
+* Close Group
+* Assign Staff
+* Unassign Staff
+
+=== Major Changes
+
+The migration introduced:
+
+* GroupCreateRequest
+* GroupUpdateRequest
+* GroupDeleteRequest
+* GroupCreateResponse
+* GroupUpdateResponse
+* GroupDeleteResponse
+* Typed command implementations
+* Dedicated command handlers
+* Updated REST resources
+* Refactored service methods
+
+The legacy JsonCommand-based methods were removed wherever possible and replaced with strongly typed request models.
+
+The Group module served as a representative example of the migration strategy that was later reused across other business modules.
+
+JIRA:
+FINERACT-2169
+
+Representative Pull Requests:
+
+* PR #6007 - Create
+* PR #6015 - Update and Delete
+* PR #2291 - activate, close, assignStaff, unassignStaff
+
+== Calendar Module
+
+The Calendar module manages calendar resources used throughout Apache Fineract.
+
+This migration included:
+
+* Create Calendar
+* Update Calendar
+* Delete Calendar
+
+Major implementation work included:
+
+* introducing typed request DTOs,
+* creating typed response models,
+* implementing dedicated command handlers,
+* updating REST resources,
+* removing legacy command processing methods.
+
+Because calendar operations are used by several other modules, maintaining backward compatibility throughout the migration was particularly important.
+
+Representative Pull Requests:
+
+* PR #2296
+
+== Job Scheduler Module
+
+The Job Scheduler migration modernized administrative scheduling operations.
+
+Migrated operations included:
+
+* Update Job
+* Execute Job
+
+One interesting technical challenge encountered during this migration involved Quartz scheduler interactions.
+
+Originally, transactional behaviour introduced unnecessary locking during asynchronous execution.
+
+Following discussion with the mentor, the implementation was updated to remove the unnecessary transaction boundary, resolving integration test failures while preserving expected runtime behaviour.
+
+Representative Pull Requests:
+
+* PR #<Scheduler PR>
+
+== Client Address Module
+
+The Client Address module migration focused on introducing typed request processing for address creation.
+
+The migration included:
+
+* ClientAddressCreateRequest
+* ClientAddressCreateResponse
+* Typed command
+* Dedicated command handler
+* Updated REST endpoint
+* Updated service implementation
+
+The migration demonstrated that relatively small business modules could also benefit from the standardized migration pattern.
+
+Representative Pull Requests:
+
+* PR #5903 - update
+* PR #5952 - execute
+
+== Client Identifier Module
+
+Client Identifier management required migration of multiple write operations.
+
+Migrated endpoints included:
+
+* Create Identifier
+* Update Identifier
+* Delete Identifier
+
+Each endpoint received:
+
+* typed request models,
+* typed response models,
+* dedicated command handlers,
+* service refactoring,
+* updated integration tests.
+
+Representative Pull Requests:
+
+* PR #<Client Identifier PR>
+
+== Family Member Module
+
+Family Member management followed the same architectural migration pattern.
+
+Migrated operations included:
+
+* Create Family Member
+* Update Family Member
+* Delete Family Member
+
+The migration replaced legacy command processing with strongly typed request handling while preserving existing business rules and integration behaviour.
+
+Representative Pull Requests:
+
+* PR #6096 - create
+* PR #6097 - update, delete
+
+== Common Migration Pattern
+
+Although the migrated modules implement different business functionality, every migration reused the same architectural pattern.
+
+----
+Request DTO
+      │
+      ▼
+Validation
+      │
+      ▼
+Command<T>
+      │
+      ▼
+Command Dispatcher
+      │
+      ▼
+Command Handler
+      │
+      ▼
+Business Service
+      │
+      ▼
+Typed Response
+----
+
+This consistency reduced implementation effort, simplified code review, and established a reusable migration strategy for future contributors.
+
+== Overall Contributions
+
+Across all migrated modules, the work completed during Google Summer of Code included:
+
+* Introduction of strongly typed request models.
+* Introduction of strongly typed response models.
+* Creation of dedicated command classes.
+* Implementation of command handlers.
+* Refactoring of REST resources.
+* Service interface modernization.
+* Service implementation refactoring.
+* Migration of validation logic.
+* Integration test updates.
+* Removal of legacy command processing infrastructure.
+
+Together, these contributions advance Apache Fineract's long-term transition towards a modern, type-safe command processing architecture while preserving compatibility with the existing REST API.
