@@ -1,1 +1,7 @@
+= Google Summer of Code 2026
 
+Apache Fineract
+
+Nidhi Bhawari
+
+Testing GitHub Pages.
