@@ -1,0 +1,139 @@
+<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>text { font-family: 'Inter', -apple-system, sans-serif; }</style>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8B7355"/>
+    </marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#D26B5F"/>
+    </marker>
+    <linearGradient id="gDispatcher" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D26B5F"/>
+      <stop offset="1" stop-color="#B8483C"/>
+    </linearGradient>
+    <linearGradient id="gDb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4A5568"/>
+      <stop offset="1" stop-color="#2A2A3B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="620" fill="#FFFCF7"/>
+
+  <!-- Title -->
+  <text x="500" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="#2A2A3B">Fineract Command Processing &mdash; System Architecture</text>
+  <text x="500" y="54" text-anchor="middle" font-size="12" fill="#8B7355">Typed pipeline from REST client to database with cross-cutting concerns</text>
+
+  <!-- ============ CLIENT LAYER ============ -->
+  <g>
+    <rect x="60" y="80" width="880" height="70" rx="14" fill="#FFFFFF" stroke="#EDE5D7" stroke-width="1.5"/>
+    <text x="80" y="104" font-size="11" font-weight="700" fill="#8B7355" letter-spacing="1.5">CLIENT</text>
+    <rect x="200" y="95" width="150" height="40" rx="8" fill="#F5EDD8" stroke="#E8B968"/>
+    <text x="275" y="119" text-anchor="middle" font-size="13" font-weight="600" fill="#4A5568">Web / Mobile App</text>
+    <rect x="380" y="95" width="150" height="40" rx="8" fill="#F5EDD8" stroke="#E8B968"/>
+    <text x="455" y="119" text-anchor="middle" font-size="13" font-weight="600" fill="#4A5568">Feign Client (JVM)</text>
+    <rect x="560" y="95" width="150" height="40" rx="8" fill="#F5EDD8" stroke="#E8B968"/>
+    <text x="635" y="119" text-anchor="middle" font-size="13" font-weight="600" fill="#4A5568">Third-party MFI</text>
+    <rect x="740" y="95" width="150" height="40" rx="8" fill="#F5EDD8" stroke="#E8B968"/>
+    <text x="815" y="119" text-anchor="middle" font-size="13" font-weight="600" fill="#4A5568">Integration Tests</text>
+  </g>
+
+  <!-- Arrow down -->
+  <line x1="500" y1="150" x2="500" y2="180" stroke="#8B7355" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ============ API LAYER ============ -->
+  <g>
+    <rect x="60" y="180" width="880" height="90" rx="14" fill="#FFFFFF" stroke="#EDE5D7" stroke-width="1.5"/>
+    <text x="80" y="204" font-size="11" font-weight="700" fill="#8B7355" letter-spacing="1.5">REST API LAYER</text>
+
+    <rect x="130" y="215" width="220" height="46" rx="8" fill="#E8EEF7" stroke="#6B8ACF"/>
+    <text x="240" y="235" text-anchor="middle" font-size="13" font-weight="600" fill="#2A2A3B">JAX-RS API Resource</text>
+    <text x="240" y="252" text-anchor="middle" font-size="10" fill="#5F6B7C" font-family="JetBrains Mono, monospace">CalendarsApiResource.create()</text>
+
+    <rect x="390" y="215" width="220" height="46" rx="8" fill="#EDF6F0" stroke="#8FAE9A"/>
+    <text x="500" y="235" text-anchor="middle" font-size="13" font-weight="600" fill="#2A2A3B">Jakarta Bean Validation</text>
+    <text x="500" y="252" text-anchor="middle" font-size="10" fill="#5F6B7C">@Valid &#183; @NotNull &#183; @NotBlank</text>
+
+    <rect x="650" y="215" width="220" height="46" rx="8" fill="#FBEBEA" stroke="#D26B5F"/>
+    <text x="760" y="235" text-anchor="middle" font-size="13" font-weight="600" fill="#2A2A3B">Spring Security</text>
+    <text x="760" y="252" text-anchor="middle" font-size="10" fill="#5F6B7C">SecurityConfig URL matchers</text>
+  </g>
+
+  <!-- Arrows down to command layer -->
+  <line x1="240" y1="261" x2="240" y2="300" stroke="#8B7355" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="500" y1="261" x2="500" y2="300" stroke="#8B7355" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ============ COMMAND LAYER (highlighted) ============ -->
+  <g>
+    <rect x="60" y="300" width="880" height="130" rx="14" fill="#FBEBEA" stroke="#D26B5F" stroke-width="2"/>
+    <text x="80" y="324" font-size="11" font-weight="700" fill="#D26B5F" letter-spacing="1.5">COMMAND LAYER &mdash; MY WORK</text>
+
+    <rect x="90" y="340" width="200" height="70" rx="10" fill="#FFFFFF" stroke="#D26B5F"/>
+    <text x="190" y="366" text-anchor="middle" font-size="13" font-weight="700" fill="#2A2A3B">Command&lt;T&gt;</text>
+    <text x="190" y="384" text-anchor="middle" font-size="10" fill="#5F6B7C">typed envelope</text>
+    <text x="190" y="399" text-anchor="middle" font-size="10" fill="#5F6B7C" font-family="JetBrains Mono, monospace">CalendarCreateCommand</text>
+
+    <rect x="310" y="340" width="200" height="70" rx="10" fill="url(#gDispatcher)"/>
+    <text x="410" y="366" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">CommandDispatcher</text>
+    <text x="410" y="384" text-anchor="middle" font-size="10" fill="#FBEBEA">routes to handler</text>
+    <text x="410" y="399" text-anchor="middle" font-size="10" fill="#FBEBEA">Resilience4j @Retry wrap</text>
+
+    <rect x="530" y="340" width="200" height="70" rx="10" fill="#FFFFFF" stroke="#D26B5F"/>
+    <text x="630" y="360" text-anchor="middle" font-size="13" font-weight="700" fill="#2A2A3B">CommandHandler</text>
+    <text x="630" y="375" text-anchor="middle" font-size="11" fill="#5F6B7C">&lt;REQ, RES&gt;</text>
+    <text x="630" y="393" text-anchor="middle" font-size="10" fill="#5F6B7C">@Component &#183; typed</text>
+    <text x="630" y="405" text-anchor="middle" font-size="10" fill="#5F6B7C">returns XxxResponse</text>
+
+    <rect x="750" y="340" width="180" height="70" rx="10" fill="#FFFFFF" stroke="#D26B5F"/>
+    <text x="840" y="366" text-anchor="middle" font-size="13" font-weight="700" fill="#2A2A3B">Handler Registry</text>
+    <text x="840" y="384" text-anchor="middle" font-size="10" fill="#5F6B7C">CommandType &rarr; Handler</text>
+    <text x="840" y="399" text-anchor="middle" font-size="10" fill="#5F6B7C">Spring auto-discovery</text>
+
+    <!-- flow arrows within layer -->
+    <line x1="290" y1="375" x2="310" y2="375" stroke="#D26B5F" stroke-width="1.5" marker-end="url(#arrR)"/>
+    <line x1="510" y1="375" x2="530" y2="375" stroke="#D26B5F" stroke-width="1.5" marker-end="url(#arrR)"/>
+    <line x1="730" y1="375" x2="750" y2="375" stroke="#D26B5F" stroke-width="1.5" marker-end="url(#arrR)"/>
+  </g>
+
+  <!-- Down arrow -->
+  <line x1="500" y1="430" x2="500" y2="460" stroke="#8B7355" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ============ SERVICE LAYER ============ -->
+  <g>
+    <rect x="60" y="460" width="880" height="70" rx="14" fill="#FFFFFF" stroke="#EDE5D7" stroke-width="1.5"/>
+    <text x="80" y="484" font-size="11" font-weight="700" fill="#8B7355" letter-spacing="1.5">SERVICE LAYER (JPA)</text>
+
+    <rect x="130" y="490" width="220" height="30" rx="6" fill="#EDF6F0" stroke="#8FAE9A"/>
+    <text x="240" y="510" text-anchor="middle" font-size="12" font-weight="600" fill="#2A2A3B">Business logic (typed)</text>
+
+    <rect x="390" y="490" width="220" height="30" rx="6" fill="#EDF6F0" stroke="#8FAE9A"/>
+    <text x="500" y="510" text-anchor="middle" font-size="12" font-weight="600" fill="#2A2A3B">Domain entities (JPA)</text>
+
+    <rect x="650" y="490" width="220" height="30" rx="6" fill="#EDF6F0" stroke="#8FAE9A"/>
+    <text x="760" y="510" text-anchor="middle" font-size="12" font-weight="600" fill="#2A2A3B">Repositories</text>
+  </g>
+
+  <!-- Arrow to DB -->
+  <line x1="500" y1="530" x2="500" y2="560" stroke="#8B7355" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ============ DATABASE ============ -->
+  <g>
+    <rect x="260" y="560" width="480" height="44" rx="10" fill="url(#gDb)"/>
+    <text x="500" y="580" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Relational Database</text>
+    <text x="500" y="596" text-anchor="middle" font-size="11" fill="#CBD5E8">PostgreSQL &#183; MySQL &#183; MariaDB (integration tests across all three)</text>
+  </g>
+
+  <!-- Side annotation: Retry config -->
+  <g>
+    <rect x="20" y="340" width="60" height="70" rx="8" fill="#FFF7EC" stroke="#E8B968" stroke-dasharray="3,3"/>
+    <text x="50" y="366" text-anchor="middle" font-size="10" font-weight="700" fill="#B48838">Resilience</text>
+    <text x="50" y="380" text-anchor="middle" font-size="9" fill="#B48838">4j retry</text>
+    <text x="50" y="394" text-anchor="middle" font-size="9" fill="#B48838">per handler</text>
+  </g>
+  <g>
+    <rect x="920" y="340" width="60" height="70" rx="8" fill="#FFF7EC" stroke="#E8B968" stroke-dasharray="3,3"/>
+    <text x="950" y="366" text-anchor="middle" font-size="10" font-weight="700" fill="#B48838">Handler</text>
+    <text x="950" y="380" text-anchor="middle" font-size="9" fill="#B48838">Unit Tests</text>
+    <text x="950" y="394" text-anchor="middle" font-size="9" fill="#B48838">(Mockito)</text>
+  </g>
+</svg>

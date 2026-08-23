@@ -1,57 +1,100 @@
 /* ============================================================
-   Modern stylesheet for Asciidoctor
-   Apache Fineract - GSoC 2026 documentation
+   Apache Fineract — GSoC 2026 Documentation
+   Warm pastel palette inspired by Apache brand
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --navy: #1e2761;
-  --navy-dark: #151b47;
-  --coral: #f96167;
-  --ice: #eef3fc;
-  --text: #1a1a2e;
-  --muted: #5a6478;
-  --border: #e3e8f2;
-  --bg: #ffffff;
-  --bg-soft: #fafbfd;
+  /* Apache-inspired pastel palette */
+  --bg:         #FFFCF7;   /* warm cream page background */
+  --bg-alt:     #FBF5EC;   /* subtle alternating section */
+  --surface:    #FFFFFF;   /* cards */
+  --border:     #EDE5D7;   /* warm sand border */
+  --text:       #2A2A3B;   /* soft dark */
+  --text-soft:  #4A5568;
+  --muted:      #8B7355;   /* warm brown muted */
+
+  --primary:    #D26B5F;   /* soft Apache red */
+  --primary-dk: #B8483C;
+  --primary-lt: #FBEBEA;   /* red-tinted background */
+
+  --gold:       #E8B968;   /* Apache accent gold */
+  --gold-lt:    #F5EDD8;
+
+  --blue:       #6B8ACF;   /* muted denim */
+  --blue-lt:    #E8EEF7;
+
+  --sage:       #8FAE9A;
+  --sage-lt:    #EDF6F0;
+
+  --charcoal:   #4A5568;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
   background: var(--bg);
   font-size: 15.5px;
   line-height: 1.7;
 }
-code, pre, tt, .listingblock code { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; }
-a { color: var(--coral); text-decoration: none; }
+code, pre, tt { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; }
+a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Kill Asciidoctor default max-widths / centered layout so our hero can be full-bleed */
-#header, #content, #footnotes, #footer {
-  max-width: none;
-  margin: 0;
-  padding: 0;
-}
+/* Kill Asciidoctor defaults */
+#header, #content, #footnotes, #footer { max-width: none; margin: 0; padding: 0; }
+#header > h1:first-child,
+#header .details,
+#header #revnumber,
+#header #author,
+#header .author,
+#toctitle { display: none; }
 
-/* HERO --------------------------------------------------------- */
+/* Hide default Asciidoctor TOC — our nav bar handles it */
+#toc, #toc.toc2 { display: none; }
+body.toc2 { padding-left: 0 !important; }
+
+/* =============== TOP NAV BAR =============== */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255, 252, 247, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 1160px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand { display: flex; align-items: center; gap: 12px; }
+.topbar-brand img { height: 40px; width: auto; }
+.topbar-nav { display: flex; gap: 24px; align-items: center; }
+.topbar-nav a { color: var(--text-soft); font-size: 14px; font-weight: 500; }
+.topbar-nav a:hover { color: var(--primary); text-decoration: none; }
+.topbar-nav a.gh {
+  background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;
+}
+.topbar-nav a.gh:hover { background: var(--primary-dk); text-decoration: none; }
+
+/* =============== HERO =============== */
 .hero {
-  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%);
-  color: white;
+  background:
+    radial-gradient(ellipse 800px 400px at 20% 0%, rgba(210,107,95,0.10), transparent 60%),
+    radial-gradient(ellipse 600px 400px at 90% 30%, rgba(232,185,104,0.15), transparent 60%),
+    var(--bg);
   padding: 88px 24px 96px;
   text-align: center;
-  margin-bottom: 0;
 }
 .hero-inner { max-width: 900px; margin: 0 auto; }
 .hero-badge {
   display: inline-block;
   padding: 6px 16px;
-  background: rgba(249, 97, 103, 0.15);
-  color: var(--coral);
-  border: 1px solid rgba(249, 97, 103, 0.3);
+  background: rgba(210,107,95,0.10);
+  color: var(--primary-dk);
+  border: 1px solid rgba(210,107,95,0.25);
   border-radius: 24px;
   font-size: 11px;
   font-weight: 600;
@@ -60,19 +103,20 @@ a:hover { text-decoration: underline; }
   margin-bottom: 24px;
 }
 .hero-title {
-  font-size: 56px;
+  font-size: 58px;
   font-weight: 800;
   line-height: 1.05;
   margin: 0 0 24px;
-  letter-spacing: -1.5px;
-  color: white;
+  letter-spacing: -1.8px;
+  color: var(--text);
 }
-.hero-title .accent { color: var(--coral); }
+.hero-title .accent { color: var(--primary); }
 .hero-tagline {
   font-size: 19px;
-  color: rgba(255,255,255,0.78);
-  max-width: 680px;
+  color: var(--text-soft);
+  max-width: 700px;
   margin: 0 auto 36px;
+  line-height: 1.6;
 }
 .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 .btn {
@@ -82,119 +126,190 @@ a:hover { text-decoration: underline; }
   font-weight: 600;
   font-size: 14px;
   text-decoration: none;
-  transition: transform 0.15s;
+  transition: all 0.15s;
 }
 .btn:hover { transform: translateY(-1px); text-decoration: none; }
-.btn-primary { background: var(--coral); color: white; }
-.btn-secondary { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.2); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dk); }
+.btn-secondary { background: white; color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
 
-/* STATS BAR ---------------------------------------------------- */
+/* =============== STATS =============== */
 .stats {
-  background: var(--navy-dark);
-  color: white;
+  background: white;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 40px 24px;
 }
 .stats-inner {
-  max-width: 1120px;
-  margin: 0 auto;
+  max-width: 1160px; margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 20px;
   text-align: center;
 }
-.stat-num { font-size: 42px; font-weight: 800; color: var(--coral); line-height: 1; }
-.stat-lbl { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.6px; }
+.stat-num { font-size: 40px; font-weight: 800; color: var(--primary); line-height: 1; }
+.stat-lbl { font-size: 12px; color: var(--muted); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
 
-/* HIDE default asciidoctor header block (we have our own hero) */
-#header > h1:first-child,
-#header .details,
-#header #revnumber,
-#header #author,
-#header .author {
-  display: none;
+/* =============== GENERIC SECTION WRAPPER =============== */
+.section { padding: 80px 24px; }
+.section-alt { background: var(--bg-alt); }
+.section-inner { max-width: 1160px; margin: 0 auto; }
+.section-head { max-width: 720px; margin: 0 auto 48px; text-align: center; }
+.section-head h2 { font-size: 34px; font-weight: 800; letter-spacing: -0.6px; margin: 0 0 12px; color: var(--text); }
+.section-head p { font-size: 17px; color: var(--text-soft); margin: 0; line-height: 1.6; }
+
+/* =============== WORKFLOW CARDS (3-col like KRYSTALM7) =============== */
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.workflow-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.workflow-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(210,107,95,0.10); }
+.workflow-card .card-viz {
+  height: 180px; padding: 24px;
+  background: linear-gradient(135deg, var(--gold-lt), var(--primary-lt));
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+.workflow-card .card-viz svg { width: 100%; height: 100%; }
+.workflow-card .card-body { padding: 24px; }
+.workflow-card h3 { margin: 0 0 8px; font-size: 17px; font-weight: 700; color: var(--text); }
+.workflow-card p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+.workflow-card .card-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  background: var(--primary-lt);
+  color: var(--primary-dk);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 
-/* CONTENT ------------------------------------------------------ */
+/* =============== ARCHITECTURE SECTION =============== */
+.arch-figure {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+.arch-figure img, .arch-figure svg { width: 100%; height: auto; display: block; }
+.arch-figure + p { text-align: center; margin-top: 20px; }
+
+/* =============== ENGINEERING HIGHLIGHTS (6 cards) =============== */
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.hl-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hl-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(75,60,50,0.08); }
+.hl-card .hl-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--primary-lt);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 18px;
+  margin-bottom: 16px;
+}
+.hl-card h3 { margin: 0 0 8px; font-size: 17px; font-weight: 700; color: var(--text); }
+.hl-card p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+
+/* =============== CONTRIBUTOR BLOCK =============== */
+.contrib {
+  background: linear-gradient(135deg, var(--gold-lt), var(--primary-lt));
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.contrib-avatar {
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 34px;
+  font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 20px rgba(210,107,95,0.30);
+}
+.contrib h3 { margin: 0 0 6px; font-size: 22px; font-weight: 700; }
+.contrib .role { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+.contrib .links a { margin: 0 10px; color: var(--primary-dk); font-weight: 600; font-size: 14px; }
+
+/* =============== ASCIIDOCTOR CONTENT (in-page docs) =============== */
 #content {
   max-width: 880px;
   margin: 0 auto;
-  padding: 56px 24px 40px;
+  padding: 40px 24px 80px;
 }
-
-/* Section headings */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Inter', sans-serif;
-  color: var(--text);
-  font-weight: 700;
-  letter-spacing: -0.4px;
-  margin-top: 44px;
-  margin-bottom: 12px;
-}
-h1 { font-size: 34px; }
-h2 { font-size: 26px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-h3 { font-size: 20px; }
-h4 { font-size: 17px; color: var(--navy); }
-
-p { margin: 0 0 14px; }
-strong { color: var(--text); font-weight: 600; }
-
-/* Lists */
-.ulist, .olist, .dlist { margin: 12px 0 18px; }
-.ulist ul, .olist ol { padding-left: 22px; }
-.ulist li, .olist li { margin-bottom: 6px; }
-.ulist li p, .olist li p { margin: 0; }
-
-/* Inline code */
-p code, li code, td code,
-.ulist code, .olist code {
-  background: var(--ice);
-  color: var(--navy);
+#content h1 { font-size: 32px; margin-top: 48px; margin-bottom: 12px; font-weight: 800; letter-spacing: -0.6px; }
+#content h2 { font-size: 26px; margin-top: 44px; margin-bottom: 12px; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+#content h3 { font-size: 20px; margin-top: 28px; margin-bottom: 10px; font-weight: 700; }
+#content h4 { font-size: 16px; margin-top: 22px; margin-bottom: 8px; font-weight: 700; color: var(--primary-dk); }
+#content p { margin: 0 0 14px; color: var(--text); }
+#content strong { color: var(--text); font-weight: 600; }
+#content .ulist, #content .olist, #content .dlist { margin: 12px 0 18px; }
+#content .ulist ul, #content .olist ol { padding-left: 22px; }
+#content .ulist li, #content .olist li { margin-bottom: 6px; }
+#content p code, #content li code, #content td code {
+  background: var(--gold-lt);
+  color: var(--primary-dk);
   padding: 2px 7px;
   border-radius: 4px;
   font-size: 13px;
 }
-
-/* Code blocks */
-.listingblock {
-  margin: 18px 0;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.listingblock pre,
-.listingblock > .content > pre {
-  background: var(--navy);
-  color: #cbd5e8;
-  padding: 20px 22px;
+#content .listingblock { margin: 18px 0; border-radius: 10px; overflow: hidden; }
+#content .listingblock pre {
+  background: #2A2A3B;
+  color: #F0E7D8;
+  padding: 22px 24px;
   margin: 0;
   overflow-x: auto;
   font-size: 13px;
-  line-height: 1.6;
-  border-radius: 8px;
+  line-height: 1.65;
+  border-radius: 10px;
 }
-.listingblock code { color: inherit; background: transparent; padding: 0; font-size: 13px; }
+#content .listingblock code { color: inherit; background: transparent; padding: 0; }
+.rouge .k, .rouge .kd, .rouge .kn { color: #E8B968; }
+.rouge .s, .rouge .s1, .rouge .s2 { color: #A8D8B9; }
+.rouge .c, .rouge .c1 { color: #8B7355; font-style: italic; }
+.rouge .n { color: #F0E7D8; }
+.rouge .nc, .rouge .nf { color: #F5D082; }
+.rouge .nd { color: #D26B5F; }
+.rouge .mi, .rouge .mf { color: #E8B968; }
 
-/* Rouge / Monokai highlight overrides (readable in navy background) */
-.rouge .k, .rouge .kd { color: #f96167; }
-.rouge .s, .rouge .s1, .rouge .s2 { color: #a3e4a3; }
-.rouge .c, .rouge .c1 { color: #7d879d; font-style: italic; }
-.rouge .n { color: #cbd5e8; }
-.rouge .nc, .rouge .nf { color: #f0d98a; }
-.rouge .nd { color: #f0d98a; }
-.rouge .mi, .rouge .mf { color: #b39ddb; }
-
-/* Tables */
-table.tableblock, table.frame-all, table.grid-all {
+#content table.tableblock, #content table.frame-all, #content table.grid-all {
   border-collapse: collapse;
   width: 100%;
   margin: 18px 0;
   background: white;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
   font-size: 14px;
 }
-table.tableblock thead th {
-  background: var(--navy);
+#content table.tableblock thead th {
+  background: var(--primary);
   color: white;
   padding: 12px 16px;
   text-align: left;
@@ -203,104 +318,64 @@ table.tableblock thead th {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-table.tableblock tbody td {
+#content table.tableblock tbody td {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
 }
-table.tableblock tbody tr:last-child td { border-bottom: none; }
-table.tableblock tbody tr:hover { background: var(--bg-soft); }
+#content table.tableblock tbody tr:last-child td { border-bottom: none; }
+#content table.tableblock tbody tr:hover { background: var(--bg-alt); }
 
-/* Admonitions (NOTE, TIP, IMPORTANT, WARNING) */
-.admonitionblock {
+#content .admonitionblock {
   margin: 20px 0;
-  background: var(--ice);
-  border-left: 4px solid var(--navy);
-  border-radius: 6px;
+  background: var(--gold-lt);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
   padding: 14px 18px;
 }
-.admonitionblock table { border: none; margin: 0; }
-.admonitionblock td.icon { display: none; }
-.admonitionblock td.content { padding: 0; border: none; }
-.admonitionblock .title { color: var(--navy); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; font-size: 11px; margin-bottom: 4px; }
-.admonitionblock.tip { border-left-color: #16a34a; background: #eaf7ee; }
-.admonitionblock.warning { border-left-color: #ea8a1a; background: #fdf3e6; }
-.admonitionblock.important { border-left-color: var(--coral); background: #fdecec; }
+#content .admonitionblock table { border: none; margin: 0; background: transparent; }
+#content .admonitionblock td.icon { display: none; }
+#content .admonitionblock td.content { padding: 0; border: none; }
+#content .admonitionblock .title { color: var(--primary-dk); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; font-size: 11px; margin-bottom: 4px; }
 
-/* Blockquote */
-.quoteblock, blockquote {
-  border-left: 3px solid var(--coral);
-  padding: 6px 0 6px 18px;
-  margin: 20px 0;
-  color: var(--muted);
-  font-style: italic;
-}
+#content .imageblock { margin: 28px 0; text-align: center; }
+#content .imageblock img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 12px; padding: 24px; background: white; }
+#content .imageblock .title { color: var(--muted); font-size: 13px; margin-top: 12px; font-style: italic; }
 
-/* Images / diagrams */
-.imageblock {
-  margin: 28px 0;
-  text-align: center;
+/* =============== FOOTER =============== */
+.site-footer {
+  background: #2A2A3B;
+  color: rgba(255,255,255,0.7);
+  padding: 56px 24px 36px;
+  margin-top: 0;
 }
-.imageblock img {
-  max-width: 100%;
-  height: auto;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(30,39,97,0.04);
-}
-.imageblock .title { color: var(--muted); font-size: 13px; margin-top: 12px; font-style: italic; }
-
-/* TOC (left) --------------------------------------------------- */
-body.toc2 { padding-left: 0; }
-#toc.toc2 {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 260px;
-  background: var(--bg-soft);
-  border-right: 1px solid var(--border);
-  padding: 24px 20px;
-  overflow-y: auto;
-  z-index: 100;
+.footer-grid {
+  max-width: 1160px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
   font-size: 13.5px;
 }
-body.toc2 #header, body.toc2 #content, body.toc2 #footer { margin-left: 260px; }
-#toc.toc2 #toctitle {
-  color: var(--navy);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  font-weight: 700;
-  margin: 0 0 14px;
-}
-#toc.toc2 ul { list-style: none; padding-left: 0; }
-#toc.toc2 li { margin-bottom: 4px; }
-#toc.toc2 a { color: var(--text); display: block; padding: 5px 10px; border-radius: 6px; text-decoration: none; }
-#toc.toc2 a:hover { background: var(--ice); color: var(--navy); }
-#toc.toc2 ul ul { padding-left: 12px; }
-#toc.toc2 ul ul a { font-size: 12.5px; color: var(--muted); padding: 3px 10px; }
-
-/* FOOTER ------------------------------------------------------- */
-#footer {
-  background: var(--navy);
-  color: rgba(255,255,255,0.7);
-  padding: 40px 24px 32px;
-  margin-top: 60px;
+.footer-grid h4 { color: white; font-size: 13px; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 1px; }
+.footer-grid ul { list-style: none; padding: 0; margin: 0; }
+.footer-grid li { margin-bottom: 7px; }
+.footer-grid a { color: rgba(255,255,255,0.7); }
+.footer-grid a:hover { color: white; }
+.footer-brand p { margin-top: 12px; line-height: 1.6; opacity: 0.75; }
+.footer-bottom {
+  max-width: 1160px; margin: 36px auto 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 20px;
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
 }
-#footer a { color: rgba(255,255,255,0.85); }
-#footer #footer-text { color: rgba(255,255,255,0.6); font-size: 12px; }
+#footer { background: transparent; padding: 0; }
 
-/* MOBILE ------------------------------------------------------- */
+/* =============== MOBILE =============== */
 @media (max-width: 900px) {
   .hero-title { font-size: 36px; }
-  .stats-inner { grid-template-columns: repeat(2, 1fr); }
-  #toc.toc2 { position: static; width: auto; border-right: none; border-bottom: 1px solid var(--border); }
-  body.toc2 #header, body.toc2 #content, body.toc2 #footer { margin-left: 0; }
-  #content { padding: 32px 20px; }
-  h1 { font-size: 26px; }
-  h2 { font-size: 21px; }
+  .stats-inner { grid-template-columns: repeat(3, 1fr); }
+  .workflow-grid, .hl-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .topbar-nav { display: none; }
+  .section { padding: 56px 20px; }
+  #content { padding: 24px 20px; }
 }

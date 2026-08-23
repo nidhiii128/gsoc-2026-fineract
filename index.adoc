@@ -14,29 +14,196 @@ Nidhi Bhawari
 :stylesheet: style.css
 :linkcss:
 :docinfo: shared
+:nofooter:
 
 ++++
+<!-- ============ TOP NAV BAR ============ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="topbar-brand" href="#">
+      <img src="images/fineract-logo.svg" alt="Apache Fineract"/>
+    </a>
+    <nav class="topbar-nav">
+      <a href="#workflow">Workflow</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#highlights">Highlights</a>
+      <a href="#docs">Docs</a>
+      <a class="gh" href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">GitHub</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
 <div class="hero">
   <div class="hero-inner">
-    <span class="hero-badge">GSoC 2026 Work Product</span>
+    <span class="hero-badge">GSoC 2026 &middot; Apache Fineract</span>
     <h1 class="hero-title">New <span class="accent">Command Processing</span><br/>Infrastructure</h1>
-    <p class="hero-tagline">Migrating Apache Fineract's legacy JsonCommand handlers to a typed, compile-safe command framework with validation, resilience, and clean service boundaries.</p>
+    <p class="hero-tagline">Migrating Apache Fineract's legacy JsonCommand handlers to a typed, compile-safe command framework — with Jakarta validation, URL-level security, and Resilience4j retry.</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="https://issues.apache.org/jira/browse/FINERACT-2169">FINERACT-2169</a>
-      <a class="btn btn-secondary" href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">My Pull Requests</a>
+      <a class="btn btn-primary" href="#docs">Read the Documentation</a>
+      <a class="btn btn-secondary" href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">Pull Requests</a>
     </div>
   </div>
 </div>
 
+<!-- ============ STATS ============ -->
 <div class="stats">
   <div class="stats-inner">
-    <div class="stat"><div class="stat-num">9</div><div class="stat-lbl">Pull Requests</div></div>
-    <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Endpoints</div></div>
-    <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Modules</div></div>
-    <div class="stat"><div class="stat-num">40+</div><div class="stat-lbl">Tests</div></div>
-    <div class="stat"><div class="stat-num">4k</div><div class="stat-lbl">Lines Added</div></div>
+    <div><div class="stat-num">9</div><div class="stat-lbl">Pull Requests</div></div>
+    <div><div class="stat-num">6</div><div class="stat-lbl">Modules</div></div>
+    <div><div class="stat-num">~20</div><div class="stat-lbl">Endpoints</div></div>
+    <div><div class="stat-num">40+</div><div class="stat-lbl">Handler Tests</div></div>
+    <div><div class="stat-num">4k</div><div class="stat-lbl">Lines Added</div></div>
+    <div><div class="stat-num">8</div><div class="stat-lbl">Principles</div></div>
   </div>
 </div>
+
+<!-- ============ WORKFLOW CARDS ============ -->
+<section class="section" id="workflow">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>Command Migration Workflow</h2>
+      <p>Every endpoint follows the same three-phase migration recipe — from the legacy JsonCommand path to a fully-typed command handler.</p>
+    </div>
+    <div class="workflow-grid">
+
+      <div class="workflow-card">
+        <div class="card-viz">
+          <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="160" height="26" rx="4" fill="#ffffff" stroke="#8B7355"/>
+            <text x="100" y="37" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#8B7355">JsonCommand cmd</text>
+            <text x="100" y="60" text-anchor="middle" font-size="9" fill="#8B7355">manual JSON parsing</text>
+            <rect x="20" y="70" width="160" height="26" rx="4" fill="#ffffff" stroke="#8B7355"/>
+            <text x="100" y="87" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#8B7355">CommandProcessingResult</text>
+            <text x="100" y="110" text-anchor="middle" font-size="9" fill="#B8483C" font-weight="700">&#10007; opaque, weakly typed</text>
+          </svg>
+        </div>
+        <div class="card-body">
+          <span class="card-tag">Phase 1 — Legacy</span>
+          <h3>The JsonCommand Pattern</h3>
+          <p>Every write endpoint parsed raw JSON in the service, returned generic results, and validated at runtime. No compile-time safety.</p>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <div class="card-viz">
+          <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="14" width="160" height="24" rx="4" fill="#FBEBEA" stroke="#D26B5F"/>
+            <text x="100" y="30" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#B8483C">XxxRequest @Valid</text>
+            <rect x="20" y="46" width="160" height="24" rx="4" fill="#FBEBEA" stroke="#D26B5F"/>
+            <text x="100" y="62" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#B8483C">Command&lt;XxxRequest&gt;</text>
+            <rect x="20" y="78" width="160" height="24" rx="4" fill="#D26B5F"/>
+            <text x="100" y="94" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#ffffff">CommandHandler</text>
+            <text x="100" y="120" text-anchor="middle" font-size="9" fill="#8FAE9A" font-weight="700">&#10003; typed end-to-end</text>
+          </svg>
+        </div>
+        <div class="card-body">
+          <span class="card-tag">Phase 2 — Typed Framework</span>
+          <h3>Request DTO → Command → Handler</h3>
+          <p>Jakarta-validated request DTOs, typed <code>Command&lt;T&gt;</code>, and <code>CommandHandler&lt;REQ, RES&gt;</code> returning strongly-typed response POJOs.</p>
+        </div>
+      </div>
+
+      <div class="workflow-card">
+        <div class="card-viz">
+          <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="16" width="160" height="20" rx="4" fill="#EDF6F0" stroke="#8FAE9A"/>
+            <text x="100" y="30" text-anchor="middle" font-size="9" fill="#4A5568">CommandWrapperBuilder.xxx()</text>
+            <line x1="30" y1="26" x2="170" y2="26" stroke="#D26B5F" stroke-width="1.5"/>
+            <rect x="20" y="44" width="160" height="20" rx="4" fill="#EDF6F0" stroke="#8FAE9A"/>
+            <text x="100" y="58" text-anchor="middle" font-size="9" fill="#4A5568">NewCommandSourceHandler</text>
+            <line x1="30" y1="54" x2="170" y2="54" stroke="#D26B5F" stroke-width="1.5"/>
+            <rect x="20" y="72" width="160" height="20" rx="4" fill="#EDF6F0" stroke="#8FAE9A"/>
+            <text x="100" y="86" text-anchor="middle" font-size="9" fill="#4A5568">service.xxx(JsonCommand)</text>
+            <line x1="30" y1="82" x2="170" y2="82" stroke="#D26B5F" stroke-width="1.5"/>
+            <text x="100" y="115" text-anchor="middle" font-size="9" fill="#8FAE9A" font-weight="700">&#10003; no parallel code paths</text>
+          </svg>
+        </div>
+        <div class="card-body">
+          <span class="card-tag">Phase 3 — Cleanup</span>
+          <h3>Delete the Legacy Path</h3>
+          <p>Every migration deletes the corresponding <code>CommandWrapperBuilder</code> method, <code>NewCommandSourceHandler</code>, and the old <code>JsonCommand</code> service signature.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARCHITECTURE ============ -->
+<section class="section section-alt" id="architecture">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>System Architecture</h2>
+      <p>Where the command layer sits — a typed pipeline from REST client to database, with validation, security, and retry as cross-cutting concerns.</p>
+    </div>
+    <div class="arch-figure">
+      <img src="images/system-architecture.svg" alt="Command Processing System Architecture"/>
+    </div>
+    <p><a class="btn btn-secondary" href="#_the_new_typed_command_framework">Read the full architecture &rarr;</a></p>
+  </div>
+</section>
+
+<!-- ============ ENGINEERING HIGHLIGHTS ============ -->
+<section class="section" id="highlights">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>Engineering Highlights</h2>
+      <p>Six patterns established across every one of the nine pull requests.</p>
+    </div>
+    <div class="hl-grid">
+      <div class="hl-card">
+        <div class="hl-icon">1</div>
+        <h3>Typed Command Framework</h3>
+        <p>Three generic pieces &mdash; <code>Command&lt;T&gt;</code>, <code>CommandHandler&lt;REQ,RES&gt;</code>, <code>CommandDispatcher</code> &mdash; replace <code>JsonCommand</code> everywhere.</p>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icon">2</div>
+        <h3>Jakarta Validation at Boundary</h3>
+        <p>Request DTOs carry <code>@NotBlank</code>, <code>@NotNull</code>, <code>@Positive</code>. Validation fires before the handler runs.</p>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icon">3</div>
+        <h3>URL-Level Authorization</h3>
+        <p>Permission checks move out of business logic into Spring Security's <code>SecurityConfig</code>. Handlers stay focused on domain logic.</p>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icon">4</div>
+        <h3>Resilience4j Retry Per Command</h3>
+        <p>Every handler carries <code>@Retry(name = "commandXxxYyy")</code> with retry parameters in <code>application.properties</code>.</p>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icon">5</div>
+        <h3>Handler Unit Tests</h3>
+        <p>Mockito-based tests for every handler assert dispatch semantics and service delegation &mdash; no integration setup required.</p>
+      </div>
+      <div class="hl-card">
+        <div class="hl-icon">6</div>
+        <h3>Legacy Removal</h3>
+        <p>Every migration <em>deletes</em> the corresponding <code>CommandWrapperBuilder.xxx()</code> and <code>NewCommandSourceHandler</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTRIBUTOR ============ -->
+<section class="section section-alt">
+  <div class="section-inner" style="max-width:760px;">
+    <div class="contrib">
+      <div class="contrib-avatar">NB</div>
+      <h3>Nidhi Bhawari</h3>
+      <p class="role">GSoC 2026 contributor at Apache Fineract &middot; Mentor: Alex Vidakovic</p>
+      <div class="links">
+        <a href="https://github.com/nidhiii128">@nidhiii128</a>
+        <a href="https://issues.apache.org/jira/browse/FINERACT-2169">FINERACT-2169</a>
+        <a href="https://github.com/apache/fineract">apache/fineract</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOCS ANCHOR ============ -->
+<div id="docs"></div>
 ++++
 
 include::sections/01-introduction.adoc[]
@@ -68,3 +235,43 @@ include::sections/13-future-work.adoc[]
 include::sections/14-lessons-learned.adoc[]
 
 include::sections/15-acknowledgements.adoc[]
+
+++++
+<!-- ============ SITE FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="images/fineract-logo.svg" alt="Apache Fineract" style="height:38px; filter: brightness(1.6);"/>
+      <p>GSoC 2026 project documentation for FINERACT-2169 — the New Command Processing Infrastructure. Not an official ASF publication.</p>
+    </div>
+    <div>
+      <h4>Documentation</h4>
+      <ul>
+        <li><a href="#_project_overview">Project Overview</a></li>
+        <li><a href="#_the_new_typed_command_framework">Architecture</a></li>
+        <li><a href="#_implementation_walkthrough">Implementation</a></li>
+        <li><a href="#_results">Results</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Upstream</h4>
+      <ul>
+        <li><a href="https://github.com/apache/fineract">apache/fineract</a></li>
+        <li><a href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">Pull Requests</a></li>
+        <li><a href="https://issues.apache.org/jira/browse/FINERACT-2169">FINERACT-2169</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Apache Software Foundation</h4>
+      <ul>
+        <li><a href="https://fineract.apache.org/">Apache Fineract</a></li>
+        <li><a href="https://www.apache.org/">ASF Home</a></li>
+        <li><a href="https://www.apache.org/licenses/">License</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    Apache&reg;, Apache Fineract&reg;, and the Fineract logo are trademarks of the Apache Software Foundation.
+  </div>
+</footer>
+++++
