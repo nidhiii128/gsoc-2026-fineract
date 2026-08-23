@@ -1,36 +1,5 @@
-= Introduction
+== Introduction
 
-Google Summer of Code (GSoC) is a global program organized by Google that encourages new contributors to participate in open source software development by working on real-world projects under the guidance of experienced mentors. During the program, contributors collaborate directly with open source communities, gaining hands-on experience in designing, implementing, testing, and maintaining production-quality software.
+This site documents my Google Summer of Code 2026 work with Apache Fineract on ticket https://issues.apache.org/jira/browse/FINERACT-2169[FINERACT-2169] — a migration of Fineract's legacy `JsonCommand` handlers to a typed command framework.
 
-I had the opportunity to participate in Google Summer of Code 2026 as a contributor to the Apache Software Foundation, working with the Apache Fineract project. My project, *New Command Processing Infrastructure*, focused on migrating existing REST endpoints from Fineract's legacy command processing mechanism to a modern, type-safe command framework based on the Command Query Responsibility Segregation (CQRS) architectural pattern.
-
-The project was mentored by *Alex Vidakovic*, who designed the new command processing infrastructure and guided the migration effort. Throughout the program, I worked closely with my mentor and the Apache Fineract community to understand the existing architecture, follow project design principles, participate in code reviews, and contribute production-ready changes to the codebase.
-
-Unlike many academic projects, this work was carried out in a large-scale open source project that serves financial institutions around the world. Every contribution required careful consideration of backward compatibility, code quality, testing, documentation, and long-term maintainability. Each pull request underwent detailed review before being accepted into the project.
-
-During the twelve-week coding period, I contributed multiple pull requests across several Fineract modules, migrating legacy APIs to the new typed command infrastructure. These migrations introduced strongly typed request and response models, centralized command handling, improved validation, and cleaner separation between API and business logic while remaining consistent with the architectural direction of Apache Fineract.
-
-This document serves as the official work product for my Google Summer of Code 2026 project. It documents the motivation behind the project, the existing architecture, the new command processing framework, the implementation details of my contributions, challenges encountered during development, testing and validation performed, project outcomes, and future work planned for the ongoing migration effort.
-
-[cols="1,1,1,1"]
-|===
-|Duration |Organization |Mentor |Project
-
-|12 Weeks
-|Apache Software Foundation
-|Aman Mittal, Alex Vidakovic
-|New Command Processing Infrastructure
-|===
-
-[cols="1,1,1,1"]
-|===
-|Pull Requests
-|Endpoints Migrated
-|Modules
-|Tests
-
-|12
-|20+
-|6
-|40+
-|===
+Over twelve weeks I shipped nine pull requests spanning six modules and roughly twenty endpoints. Every migration follows the same recipe (see <<_implementation_walkthrough,Implementation>>), and every PR had to pass the same eight non-negotiable principles set by my mentor, Alex Vidakovic.

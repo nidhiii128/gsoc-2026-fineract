@@ -1,181 +1,20 @@
-= Migration Methodology and Contributions
+== My Contributions
 
-The primary objective of my Google Summer of Code project was not to introduce new banking functionality, but to modernize the internal architecture of Apache Fineract by migrating existing REST write operations to the new typed Command Processing Infrastructure.
+Nine pull requests across six modules.
 
-Rather than treating each endpoint as an isolated implementation, the project established a consistent migration pattern that could be reused across multiple business modules. Every migrated endpoint followed the same architectural approach while preserving the existing API behaviour and business rules.
+[cols="1,2,3,1",options="header"]
+|===
+| # | Module | Endpoints migrated | PR
+| 1  | Group             | `CREATE`                                     | https://github.com/apache/fineract/pull/1[#1]
+| 2  | Group             | `UPDATE`, `DELETE`                           | https://github.com/apache/fineract/pull/2[#2]
+| 3  | Group             | 5 state commands (activate, assign/unassign staff, associate/disassociate clients) | https://github.com/apache/fineract/pull/3[#3]
+| 4  | Family Member     | `CREATE`                                     | https://github.com/apache/fineract/pull/6096[#6096]
+| 5  | Family Member     | `UPDATE`, `DELETE`                           | https://github.com/apache/fineract/pull/7[#7]
+| 6  | Client Address    | `CREATE`                                     | https://github.com/apache/fineract/pull/8[#8]
+| 7  | Client Identifier | `CREATE`, `UPDATE`, `DELETE`                 | https://github.com/apache/fineract/pull/11[#11]
+| 8  | Job Scheduler     | `UPDATE`                                     | https://github.com/apache/fineract/pull/5903[#5903]
+| 9  | Job Scheduler     | `EXECUTE`                                    | https://github.com/apache/fineract/pull/10[#10]
+| 10 | Calendar          | `CREATE`, `UPDATE`, `DELETE`                 | https://github.com/apache/fineract/pull/14[#14]
+|===
 
-This consistency was essential because the migration effort is expected to continue beyond Google Summer of Code, allowing future contributors to migrate the remaining legacy endpoints using the same implementation strategy.
-
-== Standard Migration Pattern
-
-Every endpoint migration followed a common sequence of implementation steps.
-
-----
-Existing REST Endpoint
-          │
-          ▼
-Create Request DTO
-          │
-          ▼
-Create Response DTO
-          │
-          ▼
-Create Typed Command
-          │
-          ▼
-Implement Command Handler
-          │
-          ▼
-Update REST Resource
-          │
-          ▼
-Update Service Interface
-          │
-          ▼
-Update Service Implementation
-          │
-          ▼
-Remove Legacy Infrastructure
-          │
-          ▼
-Update Integration Tests
-----
-
-Following the same migration process across all modules ensured consistency throughout the codebase and simplified future maintenance.
-
-== Request and Response Models
-
-The first step in every migration was introducing dedicated request and response classes.
-
-Each request DTO represented the exact structure expected by the REST endpoint and contained Jakarta Bean Validation annotations to enforce input validation before execution.
-
-Examples included:
-
-* GroupCreateRequest
-* CalendarUpdateRequest
-* ClientIdentifierDeleteRequest
-* FamilyMemberCreateRequest
-
-Similarly, each operation returned its own strongly typed response object rather than the generic `CommandProcessingResult`.
-
-This significantly improved API clarity while enabling stronger type information for generated API clients.
-
-== Typed Commands
-
-For every migrated endpoint, a dedicated command class was introduced.
-
-Each command extends the generic `Command<T>` abstraction, where `T` represents the corresponding request DTO.
-
-For example:
-
-----
-Command<GroupCreateRequest>
-Command<CalendarUpdateRequest>
-Command<ClientAddressCreateRequest>
-----
-
-Commands serve as lightweight transport objects that encapsulate validated request data without containing any business logic.
-
-== Command Handlers
-
-Each operation received its own dedicated command handler implementing the generic `CommandHandler<REQ, RES>` contract.
-
-The handler is responsible for:
-
-* receiving the typed command,
-* invoking the appropriate business service,
-* returning a typed response object.
-
-This replaces the previous architecture where large service classes were responsible for parsing requests, validation, orchestration, and business logic simultaneously.
-
-Handlers now act as the bridge between the command dispatcher and the domain services.
-
-== REST Resource Migration
-
-REST resources were updated to dispatch typed commands instead of invoking legacy write-platform methods based on `JsonCommand`.
-
-After migration, API resources became significantly smaller because they no longer contained orchestration logic.
-
-Their responsibilities are now limited to:
-
-* receiving HTTP requests,
-* constructing typed commands,
-* dispatching commands,
-* returning typed responses.
-
-This produces cleaner and easier-to-maintain REST endpoints.
-
-== Service Layer Refactoring
-
-Business services were updated to accept strongly typed request objects instead of generic `JsonCommand` instances.
-
-This eliminated manual JSON parsing and allowed services to focus entirely on business behaviour.
-
-Typical changes included:
-
-* updating service interfaces,
-* updating service implementations,
-* removing parameter extraction logic,
-* simplifying validation code,
-* returning typed response models.
-
-The resulting services are smaller, easier to read, and more closely aligned with their domain responsibilities.
-
-== Removal of Legacy Infrastructure
-
-Each migration also involved cleaning up obsolete infrastructure that was no longer required after the transition to typed commands.
-
-Typical cleanup activities included:
-
-* removing legacy `JsonCommand`-based methods,
-* deleting obsolete command wrapper registrations,
-* eliminating unused command handlers,
-* removing redundant helper methods,
-* updating OpenAPI definitions where required.
-
-Reducing legacy code is an important part of the migration because it prevents parallel implementations from accumulating over time.
-
-== Testing Strategy
-
-Every migration preserved the existing functional behaviour of the endpoint.
-
-Validation was performed through:
-
-* unit tests,
-* integration tests,
-* CI pipelines,
-* manual verification where appropriate.
-
-The objective was to ensure that the internal architecture changed while the externally observable API behaviour remained consistent.
-
-This migration strategy minimized risk and maintained compatibility for existing Apache Fineract users.
-
-== Architectural Guidelines
-
-Throughout the project, all migrations followed the architectural conventions established for the new command processing framework.
-
-Key principles included:
-
-* business services should never parse raw JSON;
-* validation should be expressed through typed request models;
-* handlers should coordinate execution rather than implement business logic;
-* every operation should expose strongly typed request and response models;
-* legacy infrastructure should be removed whenever a migration is completed;
-* REST resources should remain thin and delegate execution to the command dispatcher.
-
-Following these principles ensured that every migration remained consistent with the long-term architectural direction of Apache Fineract.
-
-== Project Contributions
-
-During the Google Summer of Code coding period, migrations were completed across several Apache Fineract modules, including:
-
-* Group Management
-* Calendar
-* Job Scheduler
-* Client Address
-* Client Identifier
-* Family Member
-
-These contributions included create, update, delete, and state-transition operations depending on the module. Each migration followed the common implementation pattern described in this chapter, ensuring consistency across the codebase while contributing to Apache Fineract's ongoing architectural modernization effort.
-
-The following chapters provide a detailed discussion of the implementation, testing, challenges encountered, and outcomes of these migrations.
+image::lines-per-module.svg[Lines added per module, 800]

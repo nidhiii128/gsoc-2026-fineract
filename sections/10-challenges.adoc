@@ -1,111 +1,31 @@
-= Testing and Continuous Integration
+== Challenges
 
-Apache Fineract follows a comprehensive Continuous Integration (CI) pipeline to ensure that every contribution maintains the stability, reliability, and quality of the project. Every pull request submitted during this Google Summer of Code project was validated against the same CI pipeline before review.
+=== Quartz scheduler deadlock (PR #10)
 
-Since the project modifies core REST infrastructure, maintaining compatibility with the existing codebase and preventing regressions was an important part of every migration.
+After migrating the Job `EXECUTE` endpoint, five `LoanChargeback` integration tests started timing out in CI. Root cause: `@Transactional` on the new handler was deadlocking with Quartz's async job execution — the outer transaction held a lock the job needed.
 
-== Testing Strategy
+Fix: remove `@Transactional` from the handler. Later CI runs showed the same tests failing on stock `develop`, so the fix had been protecting against a latent issue that resurfaced elsewhere.
 
-Each migration was verified at multiple levels before submission.
+=== The stale "Customer Identifier" code lookup (PR #11)
 
-The validation process included:
+A `ClientSearchTest` hit 404 in CI on `POST /clients/{id}/identifiers`. The service does:
 
-* Local compilation
-* Unit testing
-* Integration testing
-* Manual endpoint verification
-* GitHub Actions CI
-* Code review by project mentors
+[source,java]
+----
+codeValueRepository.findOneByCodeNameAndIdWithNotFoundDetection(
+    "Customer Identifier", codeValueId);
+----
 
-The objective was to modernize the internal architecture while preserving the external behaviour of every migrated endpoint.
+That lookup requires the CodeValue's parent code to be named exactly `Customer Identifier`. The test was creating code values under a randomly-named code. One-line fix in the test to look up the seeded code by name.
 
-== Integration Tests
+=== Cross-module DTO placement
 
-Apache Fineract contains an extensive integration test suite that exercises the complete application using real database instances.
+Some entities (Calendar, for one) live in `fineract-core`. If the typed update method takes a request DTO, the DTO must live in `fineract-core` too — `fineract-core` cannot depend on `fineract-provider`. Cost two hours the first time I hit it.
 
-These tests verify:
+=== Stacked PR rebases
 
-* REST API behaviour
-* Database persistence
-* Business rules
-* Authentication and authorization
-* Transaction handling
-* End-to-end workflows
+Calendar UPDATE stacked on CREATE; DELETE stacked on UPDATE. Every `upstream/develop` rebase produced conflicts in the same three files: `SecurityConfig`, `application.properties`, `CommandWrapperBuilder`. Resolution pattern: keep both sides, since each PR adds a distinct endpoint entry.
 
-After every migration, the affected integration tests were updated where necessary to use the new typed request and response models while ensuring that the observable behaviour of the API remained unchanged.
+=== Feign client regeneration
 
-== Continuous Integration Pipeline
-
-Every pull request was validated using the Apache Fineract GitHub Actions workflow.
-
-The CI pipeline performs several automated checks, including:
-
-* Project compilation
-* Code formatting verification (Spotless)
-* Checkstyle validation
-* SpotBugs static analysis
-* Unit tests
-* Integration tests
-* Database compatibility testing
-* API compatibility validation
-
-These automated checks ensure that contributions satisfy both functional and architectural quality standards before they are merged.
-
-== Multi-Database Validation
-
-Apache Fineract officially supports multiple relational database systems.
-
-The CI pipeline validates application behaviour against multiple database engines, including:
-
-* PostgreSQL
-* MySQL
-* MariaDB
-
-Running the same integration test suite against multiple databases helps identify database-specific issues and guarantees consistent behaviour across supported deployments.
-
-== GitHub Actions
-
-GitHub Actions served as the primary automation platform for validating every contribution.
-
-Each workflow automatically performed:
-
-* Source checkout
-* Dependency resolution
-* Project compilation
-* Static analysis
-* Automated testing
-* Reporting of build status
-
-Successful execution of the CI pipeline provided confidence that the migrated endpoints integrated correctly with the existing codebase.
-
-== API Backward Compatibility
-
-One CI check that occasionally reported a failure during the migration was the API Backward Compatibility validation.
-
-This occurred because the new command processing infrastructure removes several legacy `@ApiResponse` annotations as part of the architectural modernization effort.
-
-Although this causes the API compatibility checker to detect changes in the generated OpenAPI specification, these differences are expected and do not represent functional regressions.
-
-This behaviour was discussed with the project mentor, and the API compatibility failure was considered acceptable for these migration pull requests because the changes were an intentional consequence of adopting the new typed command processing framework.
-
-Apart from this expected compatibility warning, the remaining CI checks successfully validated the implementation.
-
-== Maintaining Code Quality
-
-Throughout the project, particular attention was given to maintaining Apache Fineract's coding standards.
-
-Every contribution was developed with the objective of:
-
-* preserving existing functionality,
-* minimizing architectural regressions,
-* reducing technical debt,
-* improving readability,
-* following the established migration pattern.
-
-This approach simplified code review and ensured that the implementation remained consistent with the long-term direction of the project.
-
-== Summary
-
-Testing was treated as an integral part of the migration process rather than a final verification step.
-
-Each migrated endpoint was continuously validated through automated testing, integration testing, and the project's CI pipeline to ensure that the new typed command processing infrastructure preserved existing functionality while improving the internal architecture of Apache Fineract.
+Fineract auto-generates its Feign client from OpenAPI. Every migration that changes an endpoint's response schema changes the client. Integration tests then need typed updates. Usually a mechanical rename, occasionally a signature change.

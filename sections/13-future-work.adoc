@@ -1,72 +1,14 @@
-= Future Work
+== Future Work
 
-The work completed during Google Summer of Code 2026 represents one phase of Apache Fineract's long-term migration towards the New Command Processing Infrastructure. While several important modules have now been migrated to the typed command framework, a significant portion of the existing write APIs still rely on the legacy `JsonCommand`-based implementation.
+Two upstream infrastructure blockers gate further command migration merges. Both sit ahead of me in the mentor's queue.
 
-The migration strategy adopted by the Apache Fineract community is intentionally incremental. Rather than replacing the entire command processing system in a single release, individual modules are migrated independently while maintaining full backward compatibility and minimizing disruption to production deployments.
+1. *Idempotency infrastructure.* Needed to guarantee at-most-once semantics for command handlers. A pre-GSoC attempt stalled.
+2. *Maker-checker.* Proposal on the dev list, then implementation. The new framework must preserve existing maker-checker semantics for endpoints that had them.
 
-This approach allows architectural improvements to be introduced gradually without affecting the stability of the overall system.
+Once those land, remaining modules (Loans, Savings, Charges, ...) can follow the same migration recipe.
 
-== Remaining Endpoint Migrations
-
-Many write endpoints within Apache Fineract still use the legacy command processing model.
-
-Future contributors can continue the migration effort by applying the same implementation pattern established during this project.
-
-A typical migration consists of:
-
-* Creating a typed request DTO
-* Creating a typed response DTO
-* Implementing a dedicated command class
-* Implementing a command handler
-* Updating the REST resource
-* Refactoring the service layer
-* Removing obsolete legacy infrastructure
-* Updating integration tests
-
-Because this workflow has now been standardized, future migrations should become progressively easier and more consistent.
-
-== Idempotency Support
-
-One of the larger architectural improvements planned for Apache Fineract is the introduction of idempotent command execution.
-
-Idempotency ensures that multiple identical requests do not produce unintended duplicate operations when clients retry requests due to network failures or timeouts.
-
-The typed command infrastructure introduced through this migration provides a strong architectural foundation for future idempotency support, although the complete implementation extends beyond the scope of this Google Summer of Code project.
-
-== Maker-Checker Integration
-
-Another important enhancement planned by the Apache Fineract community is improved Maker-Checker support.
-
-Maker-Checker workflows require write operations to be reviewed and approved before execution.
-
-The new command processing architecture provides clearer command boundaries that can simplify future integration of approval workflows into command execution.
-
-As discussions continue within the Apache Fineract community, the typed command framework introduced during this migration will provide a suitable foundation for these enhancements.
-
-== Continued Architectural Modernization
-
-As additional modules are migrated, several long-term improvements will gradually become more widespread throughout the codebase.
-
-These include:
-
-* Elimination of remaining `JsonCommand` usage.
-* Expansion of strongly typed request and response models.
-* Simplification of business services.
-* Increased compile-time validation.
-* Improved API documentation.
-* Better support for generated client SDKs.
-* Consistent command execution across all business modules.
-
-The migration is therefore expected to continue over multiple development cycles until the legacy command processing infrastructure can eventually be retired.
-
-== Documentation
-
-As the migration progresses, additional architectural documentation, migration guides, and contributor resources can be developed to help new contributors understand the framework and adopt the established implementation pattern more quickly.
-
-The documentation produced as part of this Google Summer of Code project is intended to contribute to that effort by describing both the motivation behind the migration and the implementation approach used throughout the project.
-
-== Conclusion
-
-Although the work completed during Google Summer of Code 2026 modernizes a significant portion of Apache Fineract's command processing infrastructure, it also establishes a reusable foundation for future development.
-
-By providing a consistent migration methodology and demonstrating its application across multiple business modules, this project helps enable the continued evolution of Apache Fineract towards a cleaner, more maintainable, and type-safe architecture.
+.CI note
+[NOTE]
+====
+The `WorkingCapitalDiscountFeeAmortizationAdjustment` E2E feature fails on some shards. Verified locally that the failure reproduces on stock `upstream/develop` — not caused by my PRs.
+====

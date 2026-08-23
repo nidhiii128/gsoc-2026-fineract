@@ -1,28 +1,7 @@
-= About Apache Fineract
+== About Apache Fineract
 
-Apache Fineract is an open source core banking platform developed under the Apache Software Foundation. It provides financial institutions with a secure, scalable, and extensible platform for delivering banking services. The project is designed to support digital financial inclusion and is used by microfinance institutions, fintech companies, digital banks, and other financial organizations across the world.
+image::fineract-logo.svg[Apache Fineract, 320, align=left]
 
-Unlike traditional banking software that is often proprietary and difficult to customize, Apache Fineract is community-driven and openly developed. Organizations can extend the platform to meet their own business requirements while benefiting from continuous improvements contributed by developers from around the world.
+Apache Fineract is a multi-tenant core-banking platform under the Apache Software Foundation. It powers microfinance institutions, digital banks, and fintechs reaching over 500 million people across Africa, Asia, and Latin America.
 
-The project is primarily developed using Java and Spring Boot and follows a layered architecture consisting of REST APIs, business services, domain models, persistence layers, and supporting infrastructure. Apache Fineract exposes hundreds of REST endpoints that enable external applications such as mobile banking platforms, internet banking portals, and financial management systems to interact with the core banking engine.
-
-Some of the major capabilities provided by Apache Fineract include:
-
-* Client and customer management
-* Group and center management
-* Loan origination and servicing
-* Savings account management
-* Fixed and recurring deposits
-* Accounting and journal entries
-* Calendar and scheduling services
-* Job scheduling and background processing
-* User authentication and authorization
-* Multi-tenancy support for serving multiple financial institutions
-
-One of Apache Fineract's key strengths is its modular architecture. Individual business domains such as Clients, Groups, Loans, Savings, Accounting, and Scheduling are organized into independent modules while sharing common infrastructure. This design enables contributors to work on specific business areas without affecting unrelated parts of the system.
-
-As the project has evolved over many years, certain parts of the architecture began to show limitations. One such area was the legacy command processing mechanism responsible for handling write operations performed through REST APIs. Although functional, the existing implementation relied heavily on generic JSON wrappers, runtime parsing, and loosely typed request handling. This increased complexity, made validation difficult, and reduced compile-time safety.
-
-To address these limitations, the Apache Fineract community initiated the development of the New Command Processing Infrastructure. The goal of this initiative is to gradually migrate existing REST endpoints to a modern, type-safe command framework based on Command Query Responsibility Segregation (CQRS). Instead of relying on generic JSON payloads, the new infrastructure introduces strongly typed request and response models, centralized command dispatching, improved validation, and clearer separation between API, command handling, and business logic.
-
-My Google Summer of Code project contributes directly to this long-term architectural modernization effort. The work completed during the program focused on migrating multiple modules from the legacy command framework to the new typed command processing infrastructure while preserving existing functionality, maintaining test coverage, and following the architectural principles established by the Apache Fineract community.
+Under the hood: Java, Spring Boot, JPA, 200+ REST endpoints, integration tests across Postgres, MySQL, and MariaDB, and a Feign client auto-generated from OpenAPI.

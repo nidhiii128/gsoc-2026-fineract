@@ -1,135 +1,18 @@
-= Challenges and Solutions
+== Demo
 
-Migrating Apache Fineract's write endpoints to the new Command Processing Infrastructure involved much more than implementing new request and response models. Because the project modifies core framework components shared across multiple business modules, every architectural change had the potential to affect a significant portion of the codebase.
+A ten-minute walkthrough of the project — organization overview, the legacy pattern, the typed framework, and a live migration of the Calendar module (PR #14).
 
-Throughout the coding period, several technical and workflow challenges were encountered. Resolving these issues required understanding the existing architecture, debugging complex failures, collaborating with mentors, and carefully validating every change before submission.
+// TIP: paste your final YouTube (unlisted) URL below once uploaded.
 
-== Quartz Scheduler Transaction Issue
+video::REPLACE_WITH_YOUTUBE_ID[youtube, width=720, height=405]
 
-One of the most interesting technical challenges occurred while migrating the Job Scheduler module.
+Segments:
 
-Initially, the command handler was implemented with transactional behaviour similar to other write operations. However, during integration testing, several scheduler-related tests began to fail unexpectedly.
-
-Investigation revealed that the Quartz scheduler executes jobs asynchronously. Introducing an unnecessary transaction boundary around command execution caused locking behaviour that interfered with asynchronous job processing.
-
-After discussing the implementation with my mentor, the unnecessary transaction handling was removed from the command handler.
-
-This restored the expected execution flow and resolved the failing integration tests while preserving the intended business behaviour.
-
-Lessons learned:
-
-* Not every write operation requires transactional execution.
-* Infrastructure components such as schedulers have different execution characteristics than standard REST requests.
-* Understanding the runtime behaviour of the framework is just as important as understanding the source code.
-
-== API Backward Compatibility Check
-
-Apache Fineract's CI pipeline includes an API Backward Compatibility validation step.
-
-During several migrations, this check reported failures after legacy `@ApiResponse` annotations were removed from migrated endpoints.
-
-The generated OpenAPI specification therefore changed, causing the compatibility checker to detect differences.
-
-These differences were expected because the migration intentionally modernizes the REST API definitions as part of the new command processing framework.
-
-After discussion with the project mentor, these API compatibility failures were accepted as expected behaviour for the affected pull requests.
-
-Apart from this known check, the remaining CI pipeline completed successfully.
-
-== Large Integration Test Failures
-
-During development, one migration unexpectedly caused dozens of integration tests to fail simultaneously.
-
-Although the initial CI output appeared unrelated to the implementation, further investigation showed that the failures originated from changes in generated OpenAPI client code.
-
-The migration modified the generated request and response types, which introduced an overload mismatch between the generated client and the existing integration tests.
-
-Updating the affected client usage restored compatibility and resolved the failing tests.
-
-This experience reinforced the importance of investigating the root cause of failures rather than assuming that the first failing test identifies the real problem.
-
-== Managing Multiple Open Pull Requests
-
-The migration work was divided across several pull requests so that each contribution remained focused and reviewable.
-
-Since multiple pull requests modified shared framework files, rebasing became an important part of the development workflow.
-
-Files that frequently required conflict resolution included:
-
-* SecurityConfig
-* CommandWrapperBuilder
-* application.properties
-* OpenAPI configuration
-* shared command infrastructure
-
-As new pull requests were merged into Apache Fineract, existing branches had to be rebased repeatedly to remain compatible with the latest version of the codebase.
-
-Keeping each pull request small and focused significantly reduced the complexity of resolving merge conflicts.
-
-== Shared Infrastructure Changes
-
-Unlike feature development confined to a single module, the command processing migration affects infrastructure shared across many parts of Apache Fineract.
-
-Adding a new command often required coordinated updates to several different components.
-
-Typical changes included:
-
-* Request DTOs
-* Response DTOs
-* Command classes
-* Command handlers
-* REST resources
-* Service interfaces
-* Service implementations
-* Security configuration
-* Retry configuration
-* Integration tests
-
-Ensuring that all of these components remained synchronized required careful attention throughout development.
-
-== Maintaining Backward Compatibility
-
-A key requirement of the project was that the migration should modernize the internal implementation without changing the observable behaviour of the REST API.
-
-Although the underlying architecture changed substantially, existing business functionality had to remain unchanged.
-
-This required careful verification after every migration to ensure that:
-
-* validation behaviour remained consistent,
-* business rules were preserved,
-* existing integrations continued to function,
-* database behaviour remained unchanged.
-
-Maintaining backward compatibility while introducing architectural improvements was one of the primary design goals of the project.
-
-== Learning Through Code Reviews
-
-Code reviews played an important role throughout the project.
-
-Feedback from the project mentor helped improve both the implementation and my understanding of Apache Fineract's architectural direction.
-
-Rather than focusing only on whether the code worked, reviews emphasized:
-
-* architectural consistency,
-* maintainability,
-* readability,
-* long-term extensibility,
-* removal of obsolete infrastructure.
-
-This experience demonstrated that contributing to a mature open-source project involves much more than implementing new functionality. Understanding the project's design philosophy is equally important.
-
-== Key Takeaways
-
-The challenges encountered during Google Summer of Code extended beyond writing code.
-
-They involved:
-
-* understanding a large production codebase,
-* debugging complex integration failures,
-* working with asynchronous infrastructure,
-* maintaining compatibility across shared components,
-* managing multiple concurrent pull requests,
-* collaborating through code reviews,
-* and following the architectural standards established by the Apache Fineract community.
-
-Overcoming these challenges significantly improved both my technical skills and my understanding of large-scale open-source software development.
+* *0:00* Intro + about me
+* *0:30* Apache Fineract — what it is, who uses it
+* *1:30* FINERACT-2169 — the legacy pattern and its costs
+* *3:00* The typed command framework
+* *4:30* Alex's 8 principles (brief)
+* *5:15* PR walkthrough — Calendar module live in IDE
+* *8:30* CI pipeline
+* *9:00* Wrap-up, what's next

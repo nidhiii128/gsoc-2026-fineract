@@ -1,80 +1,43 @@
-= Google Summer of Code 2026 – Apache Fineract
-:author: Nidhi Bhawari
+= New Command Processing Infrastructure
+Nidhi Bhawari
 :revnumber: 1.0
-:revdate: August 2026
-:doctype: book
 :toc: left
-:toclevels: 3
+:toclevels: 2
 :sectnums:
+:sectanchors:
+:sectlinks:
 :icons: font
 :source-highlighter: rouge
+:rouge-style: monokai
 :imagesdir: images
+:stylesdir: assets
+:stylesheet: style.css
+:linkcss:
+:docinfo: shared
 
-[.text-center]
-= New Command Processing Infrastructure
+++++
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-badge">GSoC 2026 Work Product</span>
+    <h1 class="hero-title">New <span class="accent">Command Processing</span><br/>Infrastructure</h1>
+    <p class="hero-tagline">Migrating Apache Fineract's legacy JsonCommand handlers to a typed, compile-safe command framework with validation, resilience, and clean service boundaries.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://issues.apache.org/jira/browse/FINERACT-2169">FINERACT-2169</a>
+      <a class="btn btn-secondary" href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">My Pull Requests</a>
+    </div>
+  </div>
+</div>
 
-[.text-center]
-== Google Summer of Code 2026
-
-[.text-center]
-=== Apache Fineract
-
-'''
-
-[cols="1,3",frame=none,grid=none]
-|===
-
-|*Contributor*
-|Nidhi Bhawari
-
-|*Mentor*
-|James Dailey, Aman Mittal
-
-|*Reviewer*
-|Aleksandar Vidakovic
-
-|*Organization*
-|Apache Software Foundation
-
-|*Project*
-|New Command Processing Infrastructure
-
-|*Program*
-|Google Summer of Code 2026
-
-|*Duration*
-|May 2026 – August 2026
-
-|===
-
-'''
-
-[NOTE]
-====
-This website documents my Google Summer of Code 2026 project for Apache Fineract.
-
-The project focused on migrating legacy write operations from the `JsonCommand`-based framework to the new typed Command Processing Infrastructure, improving type safety, maintainability, and architectural consistency across the platform.
-====
-
-== Project Overview
-
-During Google Summer of Code 2026, I contributed to Apache Fineract by migrating multiple business modules to the New Command Processing Infrastructure.
-
-The project replaces the legacy command execution model with a modern architecture based on:
-
-* Typed request models
-* Typed response models
-* Command objects
-* Dedicated command handlers
-* Command dispatcher
-* Compile-time validation
-* Cleaner service boundaries
-
-The migration establishes a reusable implementation pattern that can be applied to the remaining legacy endpoints throughout Apache Fineract.
-
-== Documentation
-
-The complete project documentation is organised into the following chapters.
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">9</div><div class="stat-lbl">Pull Requests</div></div>
+    <div class="stat"><div class="stat-num">~20</div><div class="stat-lbl">Endpoints</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Modules</div></div>
+    <div class="stat"><div class="stat-num">40+</div><div class="stat-lbl">Tests</div></div>
+    <div class="stat"><div class="stat-num">4k</div><div class="stat-lbl">Lines Added</div></div>
+  </div>
+</div>
+++++
 
 include::sections/01-introduction.adoc[]
 
@@ -105,43 +68,3 @@ include::sections/13-future-work.adoc[]
 include::sections/14-lessons-learned.adoc[]
 
 include::sections/15-acknowledgements.adoc[]
-
-'''
-
-== Project Resources
-
-[cols="1,4",options="header"]
-|===
-|Resource |Link
-
-|Apache Fineract
-|https://github.com/apache/fineract
-
-|Project Repository
-|https://github.com/nidhiii128/gsoc-2026-fineract
-
-|JIRA Issue
-|https://issues.apache.org/jira/browse/FINERACT-2169
-
-|Pull Requests
-|https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128
-
-|Demo Video
-|Coming Soon
-
-|Google Summer of Code
-|https://summerofcode.withgoogle.com/
-
-|===
-
-'''
-
-[IMPORTANT]
-====
-This website is continuously updated as additional pull requests are reviewed and merged into Apache Fineract. The latest version always reflects the current state of the project.
-====
-
-'''
-
-[.text-center]
-**© 2026 Nidhi Bhawari • Google Summer of Code • Apache Fineract**

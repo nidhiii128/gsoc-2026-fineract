@@ -1,201 +1,96 @@
-= Implementation Details
+== Implementation Walkthrough
 
-This chapter presents the implementation work completed during Google Summer of Code 2026. The objective of every contribution was to migrate existing REST write endpoints from Apache Fineract's legacy command processing mechanism to the new typed Command Processing Infrastructure while preserving existing functionality and maintaining compatibility with the rest of the system.
+=== Alex's 8 principles
 
-Rather than implementing isolated changes, each migration followed the common architectural pattern described in the previous chapter. This consistency reduced implementation complexity, simplified code reviews, and established a repeatable migration strategy for future contributors.
+Every PR had to satisfy these. Violating any of them was cause for rejection, regardless of how well the code compiled.
 
-== Modules Migrated
+1. No manual JSON de/serialization in services — services take typed request DTOs.
+2. No `context.authenticatedUser()` in business logic — authorization at URL level via `SecurityConfig`.
+3. Handlers return typed `XxxResponse` POJOs, not `CommandProcessingResult`.
+4. No new `CommandWrapperBuilder` additions — the goal is to delete them.
+5. `SecurityConfig` entries at the end of the chain, right before the `twofactor` block.
+6. No trivial `@ApiResponse(200)` annotations.
+7. Legacy `xxxService(JsonCommand)` methods must be *deleted*, not kept alongside.
+8. No `HashMap` regression in integration tests — use typed request DTOs there too.
 
-During the coding period, migrations were completed across multiple Apache Fineract modules.
+=== Migration recipe (per endpoint)
 
-[cols="1,1,2",options="header"]
-|===
-|Module
-|Operations
-|Purpose
+*Create:*
 
-|Group
-|Create, Update, Delete, State Commands
-|Manage group lifecycle operations.
+* `XxxCreateRequest.java` — Jakarta-validated DTO
+* `XxxCreateResponse.java` — plain POJO
+* `XxxCreateCommand.java` — `extends Command<XxxCreateRequest>`
+* `XxxCreateCommandHandler.java` — `@Component`, `@Retry`
+* `XxxCreateCommandHandlerTest.java` — Mockito unit test
 
-|Calendar
-|Create, Update, Delete
-|Manage calendar resources.
+*Modify:*
 
-|Job Scheduler
-|Update, Execute
-|Support scheduling infrastructure.
+* Service interface + impl — port business logic from `JsonCommand` to typed request
+* `XxxApiResource` — wire endpoint to `dispatcher.dispatch(command).get()`
+* `SecurityConfig` — add URL-level auth entry (end of chain)
+* `application.properties` — add retry config
+* `ValidationMessages.properties` — add error message keys
 
-|Client Address
-|Create
-|Manage client address information.
+*Delete:*
 
-|Client Identifier
-|Create, Update, Delete
-|Manage client identification records.
+* Legacy `NewCommandSourceHandler` for the endpoint
+* Corresponding method in `CommandWrapperBuilder`
+* Legacy `xxxService(JsonCommand)` signature on the service interface
 
-|Family Member
-|Create, Update, Delete
-|Manage family member relationships.
-|===
-
-Each migration reused the same architectural building blocks while adapting them to the business requirements of the respective module.
-
-== Migration Components
-
-Every migrated endpoint introduced a consistent set of implementation artifacts.
-
-Typical additions included:
-
-* Request DTO
-* Response DTO
-* Typed Command
-* Command Handler
-* Updated REST Resource
-* Updated Service Interface
-* Updated Service Implementation
-* Validation Updates
-* Integration Tests
-
-This standardized structure ensures that contributors working on different modules follow the same implementation approach.
-
-== Request DTOs
-
-Each migrated endpoint introduced a strongly typed request model representing the expected HTTP payload.
-
-Responsibilities of request DTOs include:
-
-* representing request fields,
-* declaring validation constraints,
-* documenting API contracts,
-* providing compile-time type safety.
-
-Validation is expressed declaratively using Jakarta Bean Validation annotations rather than manually inside service implementations.
-
-Typical validation annotations include:
+=== Full example: Calendar CREATE
 
 [source,java]
 ----
-@NotNull
-@NotBlank
-@Positive
-@Valid
-----
+// 1. Request DTO with Jakarta validation at the API boundary
+public class CalendarCreateRequest {
+    @NotBlank private String    title;
+    @NotNull  private LocalDate startDate;
+    @NotNull  private Integer   typeId;
+    @NotNull  private Integer   entityId;
+}
 
-This significantly reduces validation boilerplate and improves readability.
+// 2. Response POJO — no CommandProcessingResult
+public class CalendarCreateResponse {
+    private Long resourceId;
+    private Long entityId;
+    private String entityType;
+}
 
-== Response DTOs
+// 3. Typed command
+public class CalendarCreateCommand extends Command<CalendarCreateRequest> {
+    private String entityType;
+    private Long   entityId;
+}
 
-Instead of returning the generic `CommandProcessingResult`, each operation now exposes its own response model.
+// 4. Handler
+@Component
+@RequiredArgsConstructor
+public class CalendarCreateCommandHandler
+        implements CommandHandler<CalendarCreateRequest, CalendarCreateResponse> {
 
-Typical response classes include:
+    private final CalendarWritePlatformService service;
 
-* GroupCreateResponse
-* CalendarUpdateResponse
-* ClientIdentifierDeleteResponse
-
-Dedicated response models provide:
-
-* stronger API documentation,
-* improved generated client SDKs,
-* operation-specific semantics,
-* compile-time type safety.
-
-== Typed Commands
-
-Every migrated operation introduced a dedicated command class extending the generic `Command<T>` abstraction.
-
-Example structure:
-
-[source,java]
-----
-public class GroupCreateCommand
-        extends Command<GroupCreateRequest> {
+    @Override
+    @Retry(name = "commandCalendarCreate")
+    public CalendarCreateResponse handle(Command<CalendarCreateRequest> cmd) {
+        CalendarCreateCommand c = (CalendarCreateCommand) cmd;
+        return service.createCalendar(c.getEntityType(), c.getEntityId(), cmd.getPayload());
+    }
 }
 ----
 
-Commands encapsulate validated request data and are dispatched by the central `CommandDispatcher`.
+*Wiring:* the API resource just builds the command, dispatches it, and returns the typed response. All the JSON serialization / audit-logging / `CommandWrapperBuilder` scaffolding is gone.
 
-Importantly, commands contain no business logic.
-
-== Command Handlers
-
-Command handlers represent the execution layer of the new framework.
-
-Each handler processes one command type and delegates business execution to the corresponding service.
-
-Typical responsibilities include:
-
-* receiving validated commands,
-* invoking business services,
-* returning typed responses.
-
-This architecture keeps handlers lightweight while preserving a clean separation between infrastructure and domain logic.
-
-== REST Resource Changes
-
-REST resources were updated to integrate with the new dispatcher.
-
-After migration, REST resources primarily perform three tasks:
-
-. receive HTTP requests,
-. dispatch typed commands,
-. return typed responses.
-
-This significantly reduces the amount of orchestration logic previously embedded within REST resources.
-
-== Service Refactoring
-
-Business services were updated to receive typed request objects rather than generic `JsonCommand` instances.
-
-This change eliminated manual JSON extraction and allowed services to operate directly on validated domain models.
-
-As a result, service implementations became:
-
-* shorter,
-* easier to understand,
-* easier to test,
-* focused exclusively on business behaviour.
-
-== Legacy Cleanup
-
-Migration also involved removing obsolete infrastructure that was no longer required.
-
-Examples include:
-
-* legacy command wrapper registrations,
-* unused helper methods,
-* deprecated service methods,
-* obsolete command handlers.
-
-Removing outdated infrastructure is an important part of the migration because it prevents architectural duplication and reduces future maintenance effort.
-
-== Consistent Migration Workflow
-
-Every endpoint migration followed the same implementation sequence.
-
+[source,java]
 ----
-Request DTO
-      │
-      ▼
-Response DTO
-      │
-      ▼
-Typed Command
-      │
-      ▼
-Command Handler
-      │
-      ▼
-REST Resource
-      │
-      ▼
-Service Layer
-      │
-      ▼
-Integration Tests
+@POST @Path("/{entityId}/calendars")
+public CalendarCreateResponse create(@Valid CalendarCreateRequest req,
+                                      @PathParam("entityType") String entityType,
+                                      @PathParam("entityId")   Long entityId) {
+    CalendarCreateCommand cmd = new CalendarCreateCommand();
+    cmd.setPayload(req);
+    cmd.setEntityType(entityType);
+    cmd.setEntityId(entityId);
+    return dispatcher.dispatch(cmd).get();
+}
 ----
-
-Following a consistent workflow across all migrated modules simplified development, reduced review effort, and established a repeatable pattern for future contributors.
-
-The next section presents the module-specific implementation details and highlights notable technical challenges encountered during the migration process.

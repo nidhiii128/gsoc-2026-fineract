@@ -1,0 +1,45 @@
+<svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>text { font-family: Inter, -apple-system, sans-serif; }</style>
+  </defs>
+  <text x="400" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#1e2761">Lines Added per Module</text>
+
+  <line x1="140" y1="270" x2="760" y2="270" stroke="#e3e8f2" stroke-width="1"/>
+  <line x1="140" y1="70" x2="140" y2="270" stroke="#e3e8f2" stroke-width="1"/>
+
+  <line x1="140" y1="120" x2="760" y2="120" stroke="#f0f4fa" stroke-dasharray="3,3"/>
+  <line x1="140" y1="170" x2="760" y2="170" stroke="#f0f4fa" stroke-dasharray="3,3"/>
+  <line x1="140" y1="220" x2="760" y2="220" stroke="#f0f4fa" stroke-dasharray="3,3"/>
+
+  <text x="130" y="125" text-anchor="end" font-size="11" fill="#5a6478">1500</text>
+  <text x="130" y="175" text-anchor="end" font-size="11" fill="#5a6478">1000</text>
+  <text x="130" y="225" text-anchor="end" font-size="11" fill="#5a6478">500</text>
+  <text x="130" y="275" text-anchor="end" font-size="11" fill="#5a6478">0</text>
+
+  <g fill="#1e2761">
+    <rect x="170" y="90"  width="70" height="180" rx="4"/>
+    <rect x="270" y="190" width="70" height="80"  rx="4"/>
+    <rect x="370" y="240" width="70" height="30"  rx="4"/>
+    <rect x="470" y="180" width="70" height="90"  rx="4"/>
+    <rect x="570" y="225" width="70" height="45"  rx="4"/>
+  </g>
+  <rect x="670" y="170" width="70" height="100" rx="4" fill="#f96167"/>
+
+  <g font-size="12" font-weight="600" fill="#1e2761" text-anchor="middle">
+    <text x="205" y="82">1800</text>
+    <text x="305" y="182">800</text>
+    <text x="405" y="232">300</text>
+    <text x="505" y="172">900</text>
+    <text x="605" y="217">450</text>
+    <text x="705" y="162" fill="#f96167">1000</text>
+  </g>
+
+  <g font-size="12" fill="#5a6478" text-anchor="middle">
+    <text x="205" y="290">Group</text>
+    <text x="305" y="290">Family</text>
+    <text x="405" y="290">Address</text>
+    <text x="505" y="290">Identifier</text>
+    <text x="605" y="290">Job</text>
+    <text x="705" y="290" font-weight="600" fill="#f96167">Calendar</text>
+  </g>
+</svg>
