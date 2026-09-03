@@ -1,0 +1,58 @@
+= Command Idempotency
+
+Idempotency in the command pipeline has two facets:
+
+* *Request-level*: a client re-submitting the same command (same `x-fineract-request-id`) must not cause the underlying operation to run twice.
+* *Handler-level*: a handler invoked more than once for the same payload (e.g. via a retry) must converge on the same end state without side effects.
+
+The current infrastructure covers request-level idempotency through database lookups in the dispatcher path. This chapter focuses on what handlers must do to remain safe under handler-level retries.
+
+== Handlers must not carry `@Transactional`
+
+The dispatcher wraps each handler invocation with a Resilience4j `@Retry` (see xref:observability.adoc[Command Observability]). If a handler declares `@Transactional`, the retry executes inside an outer transaction that survives across attempts, which produces two failure modes:
+
+* *Deadlock with Quartz jobs.* Handlers that execute inside a scheduled job hold a long-running transaction while the retry sleeps between attempts. Quartz's own transactional bookkeeping then blocks waiting for the same rows, and the job times out.
+* *Silent duplication on retry.* If the first attempt commits partially and the second re-runs the same JPA writes, unique constraints trip and the retry looks like a bug in the domain logic.
+
+The rule is straightforward: *transactions belong to the service layer, not the handler.*
+
+.Handler pattern &mdash; no `@Transactional`
+[source,java]
+----
+@Component
+@RequiredArgsConstructor
+public class CalendarCreateCommandHandler
+        implements CommandHandler<CalendarCreateRequest, CalendarCreateResponse> {
+
+    private final CalendarWritePlatformService service;
+
+    @Override
+    @Retry(name = "commandCalendarCreate")
+    public CalendarCreateResponse handle(Command<CalendarCreateRequest> cmd) {
+        var c = (CalendarCreateCommand) cmd;
+        return service.createCalendar(c.getEntityType(), c.getEntityId(), cmd.getPayload());
+    }
+}
+----
+
+The service method (`createCalendar` above) is where `@Transactional` lives, and it is where the unit-of-work boundary is defined.
+
+== What "handler-safe under retry" means in practice
+
+A handler is safe to retry when every retry path either:
+
+* fully re-executes the underlying service call and reaches the same terminal state (idempotent write &mdash; e.g. upsert against a natural key), or
+* short-circuits early because the write has already been applied (checked via a domain-level probe before the mutation).
+
+The framework does not attempt to distinguish "the first attempt already committed" from "the first attempt rolled back and needs re-running". Handlers that write must therefore be either naturally idempotent, or must consult the store to decide whether the write is still needed.
+
+== Interaction with request-level idempotency
+
+Request-level idempotency (the `x-fineract-request-id` lookup on the dispatcher) short-circuits *before* the handler runs. That guarantee is only as strong as the client's willingness to reuse the same request ID on retry &mdash; a client that generates a fresh UUID on every attempt sees each attempt as a new command.
+
+TIP: Where a client submits without a request ID, treat the operation as at-most-once *not enforced*. The handler must still be idempotent on its own merits.
+
+== Related
+
+* xref:observability.adoc[Command Observability] &mdash; how `@Retry` is configured per command
+* xref:handler.adoc[Command Handler] &mdash; handler contract and lifecycle

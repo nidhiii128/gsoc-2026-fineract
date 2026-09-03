@@ -21,7 +21,8 @@ Nidhi Bhawari
 <div class="topbar">
   <div class="topbar-inner">
     <a class="topbar-brand" href="#">
-      <img src="images/fineract-logo.svg" alt="Apache Fineract"/>
+      <img src="images/fineract-icon.svg" alt=""/>
+      <span>Apache Fineract</span>
     </a>
     <nav class="topbar-nav">
       <a href="#workflow">Workflow</a>
@@ -241,7 +242,10 @@ include::sections/15-acknowledgements.adoc[]
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="images/fineract-logo.svg" alt="Apache Fineract" style="height:38px; filter: brightness(1.6);"/>
+      <div class="footer-brand-row">
+        <img src="images/fineract-icon.svg" alt="" style="height:32px;width:auto;"/>
+        <span>Apache Fineract</span>
+      </div>
       <p>GSoC 2026 project documentation for FINERACT-2169 — the New Command Processing Infrastructure. Not an official ASF publication.</p>
     </div>
     <div>
@@ -262,7 +266,10 @@ include::sections/15-acknowledgements.adoc[]
       </ul>
     </div>
     <div>
-      <h4>Apache Software Foundation</h4>
+      <div class="footer-brand-row">
+        <img src="images/apache-feather.svg" alt="" style="height:30px;width:auto;"/>
+        <h4>Apache Software Foundation</h4>
+      </div>
       <ul>
         <li><a href="https://fineract.apache.org/">Apache Fineract</a></li>
         <li><a href="https://www.apache.org/">ASF Home</a></li>

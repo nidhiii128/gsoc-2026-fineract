@@ -1,0 +1,86 @@
+= Command Observability
+
+Observability of the command pipeline covers three concerns: *retry behavior* (how often handlers are re-attempted and why), *metrics* (counters and timers surfaced to the monitoring stack), and *structured logging* (what shows up in the server log for a given command).
+
+== Retry configuration per command
+
+Each handler declares its own retry instance name. This lets operators tune retry policy per command type without redeploying and without changing code.
+
+.Declaring a retry on a handler
+[source,java]
+----
+@Component
+public class CalendarCreateCommandHandler
+        implements CommandHandler<CalendarCreateRequest, CalendarCreateResponse> {
+
+    @Override
+    @Retry(name = "commandCalendarCreate")
+    public CalendarCreateResponse handle(Command<CalendarCreateRequest> cmd) {
+        // ...
+    }
+}
+----
+
+Naming convention: `command` + camel-cased command class (dropping the trailing `Command`). `CalendarCreateCommand` &rarr; `commandCalendarCreate`, `GroupUpdateCommand` &rarr; `commandGroupUpdate`.
+
+The corresponding entries in `application.properties`:
+
+[source,properties]
+----
+resilience4j.retry.instances.commandCalendarCreate.max-attempts=3
+resilience4j.retry.instances.commandCalendarCreate.wait-duration=200ms
+resilience4j.retry.instances.commandCalendarCreate.retry-exceptions[0]=org.springframework.dao.TransientDataAccessException
+----
+
+Only retry on exceptions that are actually transient. Deliberately do not retry on `ConstraintViolationException`, validation failures, or business-rule violations &mdash; those will fail identically on every attempt and only add latency.
+
+== Metrics
+
+Resilience4j automatically publishes retry metrics through Micrometer, and Fineract's `MetricsConfiguration` wires them into the same registry that carries JVM and HTTP metrics. Per-command counters that appear:
+
+[cols="1,3",options="header"]
+|===
+| Metric                                        | Meaning
+| `resilience4j_retry_calls_total{kind="successful_without_retry"}`     | Handler succeeded on the first attempt.
+| `resilience4j_retry_calls_total{kind="successful_with_retry"}`        | Handler eventually succeeded after one or more retries.
+| `resilience4j_retry_calls_total{kind="failed_with_retry"}`            | Handler exhausted attempts and threw.
+| `resilience4j_retry_calls_total{kind="failed_without_retry"}`         | Handler threw a non-retryable exception.
+|===
+
+Each metric is tagged with `name=<retry-instance-name>`, so per-command dashboards fall out naturally.
+
+TIP: A rising `failed_with_retry` counter for a specific command is almost always the signal that the retry policy is masking a bug in the handler. Fix the handler, do not raise `max-attempts`.
+
+== Structured logging
+
+The dispatcher logs the command class, correlation ID (`x-fineract-request-id`), and tenant on each dispatch. Handlers should log only *domain* events &mdash; the routing information is already carried by the dispatcher log line.
+
+.Handler logging pattern
+[source,java]
+----
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class CalendarCreateCommandHandler
+        implements CommandHandler<CalendarCreateRequest, CalendarCreateResponse> {
+
+    private final CalendarWritePlatformService service;
+
+    @Override
+    @Retry(name = "commandCalendarCreate")
+    public CalendarCreateResponse handle(Command<CalendarCreateRequest> cmd) {
+        var c = (CalendarCreateCommand) cmd;
+        var response = service.createCalendar(c.getEntityType(), c.getEntityId(), cmd.getPayload());
+        log.info("calendar created id={} entity={}:{}",
+                 response.getResourceId(), c.getEntityType(), c.getEntityId());
+        return response;
+    }
+}
+----
+
+Avoid logging the entire payload &mdash; requests may contain personally identifiable information. Log identifiers and outcomes.
+
+== Related
+
+* xref:idempotency.adoc[Command Idempotency] &mdash; why handlers must be safe to retry
+* xref:handler.adoc[Command Handler] &mdash; handler contract
