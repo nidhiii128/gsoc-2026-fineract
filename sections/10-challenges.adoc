@@ -1,12 +1,15 @@
 == Challenges
 
-=== Quartz scheduler deadlock (PR #10)
+.PR #6007 (Group CREATE) under review — two reviewers, 94 CI checks
+image::screenshot-pr-detail.jpg[A pull request open for review on apache/fineract, 900]
+
+=== Quartz scheduler deadlock (PR #5952)
 
 After migrating the Job `EXECUTE` endpoint, five `LoanChargeback` integration tests started timing out in CI. Root cause: `@Transactional` on the new handler was deadlocking with Quartz's async job execution — the outer transaction held a lock the job needed.
 
 Fix: remove `@Transactional` from the handler. Later CI runs showed the same tests failing on stock `develop`, so the fix had been protecting against a latent issue that resurfaced elsewhere.
 
-=== The stale "Customer Identifier" code lookup (PR #11)
+=== The stale "Customer Identifier" code lookup (PR #6227)
 
 A `ClientSearchTest` hit 404 in CI on `POST /clients/{id}/identifiers`. The service does:
 

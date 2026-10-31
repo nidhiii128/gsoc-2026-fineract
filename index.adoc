@@ -37,12 +37,115 @@ Nidhi Bhawari
 <!-- ============ HERO ============ -->
 <div class="hero">
   <div class="hero-inner">
-    <span class="hero-badge">GSoC 2026 &middot; Apache Fineract</span>
-    <h1 class="hero-title">New <span class="accent">Command Processing</span><br/>Infrastructure</h1>
-    <p class="hero-tagline">Migrating Apache Fineract's legacy JsonCommand handlers to a typed, compile-safe command framework — with Jakarta validation, URL-level security, and Resilience4j retry.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="#docs">Read the Documentation</a>
-      <a class="btn btn-secondary" href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">Pull Requests</a>
+    <div class="hero-copy">
+      <span class="hero-badge">GSoC 2026 &middot; Apache Fineract</span>
+      <h1 class="hero-title">New <span class="accent">Command Processing</span><br/>Infrastructure</h1>
+      <p class="hero-tagline">Migrating Apache Fineract's legacy JsonCommand handlers to a typed, compile-safe command framework — with Jakarta validation, URL-level security, and Resilience4j retry.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#docs">Read the Documentation</a>
+        <a class="btn btn-secondary" href="https://github.com/apache/fineract/pulls?q=is%3Apr+author%3Anidhiii128">Pull Requests</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 480 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="heroFeather" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#F5A623"/>
+            <stop offset="0.5" stop-color="#E0432A"/>
+            <stop offset="1" stop-color="#C2007A"/>
+          </linearGradient>
+          <radialGradient id="hexGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#DB74B5" stop-opacity="0.32"/>
+            <stop offset="100%" stop-color="#DB74B5" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3A1B3E"/>
+            <stop offset="1" stop-color="#241030"/>
+          </linearGradient>
+          <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2A1330"/>
+            <stop offset="1" stop-color="#150A1B"/>
+          </linearGradient>
+        </defs>
+
+        <!-- scattered stars -->
+        <g>
+          <circle cx="40" cy="60" r="2" fill="#FFFBF4" opacity="0.8"/>
+          <circle cx="92" cy="28" r="1.4" fill="#FFFBF4" opacity="0.55"/>
+          <circle cx="130" cy="75" r="1.6" fill="#7CB93C" opacity="0.7"/>
+          <circle cx="60" cy="130" r="1.4" fill="#FFFBF4" opacity="0.5"/>
+          <circle cx="340" cy="95" r="1.8" fill="#1E76A8" opacity="0.75"/>
+          <circle cx="398" cy="150" r="1.5" fill="#FFFBF4" opacity="0.6"/>
+          <circle cx="360" cy="200" r="1.6" fill="#DB74B5" opacity="0.7"/>
+          <circle cx="430" cy="100" r="1.4" fill="#FFFBF4" opacity="0.5"/>
+          <circle cx="300" cy="40" r="1.8" fill="#F5A623" opacity="0.75"/>
+          <circle cx="150" cy="40" r="1.4" fill="#FFFBF4" opacity="0.5"/>
+          <circle cx="60" cy="250" r="1.4" fill="#FFFBF4" opacity="0.45"/>
+          <circle cx="420" cy="260" r="1.6" fill="#7CB93C" opacity="0.6"/>
+        </g>
+
+        <!-- comet streak (feather gradient) -->
+        <path d="M 430 35 Q 330 85 235 150" stroke="url(#heroFeather)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.85"/>
+        <circle cx="430" cy="35" r="4" fill="#F5A623"/>
+
+        <!-- glow behind the mark -->
+        <circle cx="240" cy="195" r="165" fill="url(#hexGlow)"/>
+
+        <!-- Fineract nested-hexagon mark, rendered as the "moon" -->
+        <g transform="translate(240,190) rotate(-6)" fill="none" stroke-linejoin="round">
+          <polygon points="0,-90 78,-45 78,45 0,90 -78,45 -78,-45" stroke="#DB74B5" stroke-width="2.5" opacity="0.9"/>
+          <polygon points="0,-62 54,-31 54,31 0,62 -54,31 -54,-31" stroke="#1E76A8" stroke-width="2.5" opacity="0.9"/>
+          <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" stroke="#7CB93C" stroke-width="2.5" fill="#7CB93C" fill-opacity="0.18" opacity="0.95"/>
+        </g>
+
+        <!-- dispatch beacon, wired up to the mark -->
+        <line x1="240" y1="420" x2="240" y2="288" stroke="#F5D6A0" stroke-width="1.5" stroke-dasharray="3 6" opacity="0.4"/>
+        <circle cx="240" cy="420" r="15" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.25"/>
+        <circle cx="240" cy="420" r="8" fill="none" stroke="#F5A623" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="240" cy="420" r="4" fill="#F5A623"/>
+
+        <!-- hill silhouettes -->
+        <path d="M0,478 C80,438 140,458 200,438 C260,418 300,448 360,428 C410,413 450,428 480,418 L480,560 L0,560 Z" fill="url(#hillGrad1)"/>
+        <path d="M0,520 C70,500 150,515 220,495 C300,470 360,505 480,480 L480,560 L0,560 Z" fill="url(#hillGrad2)"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DIFFERENCE STRIP ============ -->
+<div class="diff">
+  <div class="diff-inner">
+    <p class="diff-head">The Framework Difference</p>
+    <div class="diff-grid">
+      <div class="diff-item">
+        <div class="diff-icon">
+          <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23 4 L40 11 V22 C40 32 33 39 23 42 C13 39 6 32 6 22 V11 Z" fill="none" stroke="#E0432A" stroke-width="2"/>
+            <path d="M15 23 L21 29 L32 16" fill="none" stroke="#E0432A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Type Safety</h3>
+        <p>Requests and responses are typed end-to-end with <code>Command&lt;T&gt;</code> and <code>CommandHandler&lt;REQ,RES&gt;</code>. The compiler catches shape mismatches before CI does.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">
+          <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 8 H40 L26 24 V36 L20 33 V24 Z" fill="none" stroke="#1E76A8" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Validated at the Boundary</h3>
+        <p>Jakarta <code>@Valid</code> fires on the request DTO before a handler ever runs — no runtime JSON parsing scattered through services.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">
+          <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+            <path d="M35 15 A16 16 0 1 0 38 26" fill="none" stroke="#7CB93C" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M38 6 L35 15 L26 13" fill="none" stroke="#7CB93C" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Resilient by Default</h3>
+        <p>Every handler carries a Resilience4j <code>@Retry</code> policy, configured per command in <code>application.properties</code>.</p>
+      </div>
     </div>
   </div>
 </div>

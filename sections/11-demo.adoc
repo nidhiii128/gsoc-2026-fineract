@@ -1,10 +1,10 @@
 == Demo
 
-A ten-minute walkthrough of the project — organization overview, the legacy pattern, the typed framework, and a live migration of the Calendar module (PR #14).
+A ten-minute walkthrough of the project — organization overview, the legacy pattern, the typed framework, and a live migration of the Calendar module (https://github.com/apache/fineract/pull/6248[#6248]).
 
-// TIP: paste your final YouTube (unlisted) URL below once uploaded.
+NOTE: This video is unlisted on YouTube — it's reachable only via the direct link below, not through search or the channel listing.
 
-video::REPLACE_WITH_YOUTUBE_ID[youtube, width=720, height=405]
+video::19CsDhsHX_k[youtube, width=720, height=405]
 
 Segments:
 

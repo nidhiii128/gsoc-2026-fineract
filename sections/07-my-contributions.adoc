@@ -22,3 +22,6 @@ Fourteen pull requests across six modules, plus one documentation PR. All are op
 |===
 
 image::lines-per-module.svg[Lines added per module, 800]
+
+.The live PR queue on apache/fineract, filtered to this project
+image::screenshot-pr-list.jpg[Pull request list filtered to author nidhiii128, 900]
