@@ -2,4 +2,4 @@
 
 This site documents my Google Summer of Code 2026 work with Apache Fineract on ticket https://issues.apache.org/jira/browse/FINERACT-2169[FINERACT-2169] — a migration of Fineract's legacy `JsonCommand` handlers to a typed command framework.
 
-Over twelve weeks I shipped nine pull requests spanning six modules and roughly twenty endpoints. Every migration follows the same recipe (see <<_implementation_walkthrough,Implementation>>), and every PR had to pass the same eight non-negotiable principles set by my mentor, Alex Vidakovic.
+Over twelve weeks I shipped fourteen pull requests (thirteen code migrations plus one documentation PR) spanning six modules and roughly 21 endpoints. Every migration follows the same recipe (see <<_implementation_walkthrough,Implementation>>), and every PR had to pass the same eight non-negotiable principles set by my mentor, Alex Vidakovic.

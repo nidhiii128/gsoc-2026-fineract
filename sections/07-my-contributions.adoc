@@ -1,20 +1,24 @@
 == My Contributions
 
-Nine pull requests across six modules.
+Fourteen pull requests across six modules, plus one documentation PR. All are open and currently under review (see <<_challenges>>).
 
 [cols="1,2,3,1",options="header"]
 |===
 | # | Module | Endpoints migrated | PR
-| 1  | Group             | `CREATE`                                     | https://github.com/apache/fineract/pull/1[#1]
-| 2  | Group             | `UPDATE`, `DELETE`                           | https://github.com/apache/fineract/pull/2[#2]
-| 3  | Group             | 5 state commands (activate, assign/unassign staff, associate/disassociate clients) | https://github.com/apache/fineract/pull/3[#3]
+| 1  | Group             | `CREATE`                                     | https://github.com/apache/fineract/pull/6007[#6007]
+| 2  | Group             | `UPDATE`, `DELETE`                           | https://github.com/apache/fineract/pull/6015[#6015]
+| 3  | Group             | 5 state commands (activate, close, assign/unassign staff, associate/disassociate clients) | https://github.com/apache/fineract/pull/6021[#6021]
 | 4  | Family Member     | `CREATE`                                     | https://github.com/apache/fineract/pull/6096[#6096]
-| 5  | Family Member     | `UPDATE`, `DELETE`                           | https://github.com/apache/fineract/pull/7[#7]
-| 6  | Client Address    | `CREATE`                                     | https://github.com/apache/fineract/pull/8[#8]
-| 7  | Client Identifier | `CREATE`, `UPDATE`, `DELETE`                 | https://github.com/apache/fineract/pull/11[#11]
-| 8  | Job Scheduler     | `UPDATE`                                     | https://github.com/apache/fineract/pull/5903[#5903]
-| 9  | Job Scheduler     | `EXECUTE`                                    | https://github.com/apache/fineract/pull/10[#10]
-| 10 | Calendar          | `CREATE`, `UPDATE`, `DELETE`                 | https://github.com/apache/fineract/pull/14[#14]
+| 5  | Family Member     | `UPDATE`, `DELETE`                           | https://github.com/apache/fineract/pull/6097[#6097]
+| 6  | Client Address    | `CREATE`                                     | https://github.com/apache/fineract/pull/6049[#6049]
+| 7  | Client Address    | `UPDATE`                                     | https://github.com/apache/fineract/pull/6085[#6085]
+| 8  | Client Identifier | `CREATE`, `UPDATE`, `DELETE`                 | https://github.com/apache/fineract/pull/6227[#6227]
+| 9  | Job Scheduler     | `UPDATE`                                     | https://github.com/apache/fineract/pull/5903[#5903]
+| 10 | Job Scheduler     | `EXECUTE`                                    | https://github.com/apache/fineract/pull/5952[#5952]
+| 11 | Calendar          | `CREATE`                                     | https://github.com/apache/fineract/pull/6248[#6248]
+| 12 | Calendar          | `UPDATE`                                     | https://github.com/apache/fineract/pull/6322[#6322]
+| 13 | Calendar          | `DELETE` (+ bulk importers)                  | https://github.com/apache/fineract/pull/6323[#6323]
+| 14 | Documentation     | Command Processing validation chapter        | https://github.com/apache/fineract/pull/6326[#6326]
 |===
 
 image::lines-per-module.svg[Lines added per module, 800]

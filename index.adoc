@@ -50,11 +50,11 @@ Nidhi Bhawari
 <!-- ============ STATS ============ -->
 <div class="stats">
   <div class="stats-inner">
-    <div><div class="stat-num">9</div><div class="stat-lbl">Pull Requests</div></div>
+    <div><div class="stat-num">14</div><div class="stat-lbl">Pull Requests</div></div>
     <div><div class="stat-num">6</div><div class="stat-lbl">Modules</div></div>
-    <div><div class="stat-num">~20</div><div class="stat-lbl">Endpoints</div></div>
+    <div><div class="stat-num">21</div><div class="stat-lbl">Endpoints</div></div>
     <div><div class="stat-num">40+</div><div class="stat-lbl">Handler Tests</div></div>
-    <div><div class="stat-num">4k</div><div class="stat-lbl">Lines Added</div></div>
+    <div><div class="stat-num">~9.7k</div><div class="stat-lbl">Lines Added</div></div>
     <div><div class="stat-num">8</div><div class="stat-lbl">Principles</div></div>
   </div>
 </div>
@@ -150,7 +150,7 @@ Nidhi Bhawari
   <div class="section-inner">
     <div class="section-head">
       <h2>Engineering Highlights</h2>
-      <p>Six patterns established across every one of the nine pull requests.</p>
+      <p>Six patterns established across every one of the fourteen pull requests.</p>
     </div>
     <div class="hl-grid">
       <div class="hl-card">

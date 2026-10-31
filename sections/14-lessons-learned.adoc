@@ -4,6 +4,6 @@
 
 *CI is a design constraint.* With 20 shards on a real database and Quartz, everything must be idempotent, deterministic, and self-cleaning. Roughly 30% of my summer went to CI edge cases that never surfaced locally.
 
-*Rebasing is a skill.* Nine open PRs with overlapping files means constant rebasing. Small, atomic, stacked PRs made this manageable.
+*Rebasing is a skill.* Fourteen open PRs with overlapping files means constant rebasing. Small, atomic, stacked PRs made this manageable.
 
 *Precise questions get precise answers.* "This test fails" got nothing. "X calls Y with Z, I think the fix is A or B, which do you prefer?" got clear replies within hours.

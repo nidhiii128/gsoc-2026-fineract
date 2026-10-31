@@ -4,12 +4,12 @@
 |===
 | Metric | Value
 
-| Pull requests           | 9 opened
+| Pull requests           | 14 opened (13 code migrations + 1 documentation)
 | Modules migrated        | 6 (Group, Family Member, Client Address, Client Identifier, Job Scheduler, Calendar)
-| Endpoints migrated      | ~20
+| Endpoints migrated      | 21
 | Handler unit tests      | 40+
-| Lines added / removed   | ~4,000 added / ~2,000 removed
+| Lines added / removed   | ~9,700 added / ~4,480 removed
 | Duration                | 12 weeks
 |===
 
-Every PR passes checkstyle, spotless, unit tests, and integration tests on Postgres, MySQL, and MariaDB. The remaining review lag is upstream infrastructure work (see <<_future_work,Future Work>>).
+None of the 14 PRs have merged yet — all currently carry a `CHANGES_REQUESTED` review (see <<_challenges,Challenges>>). Checkstyle, spotless, and the unit/integration test suites on Postgres, MySQL, and MariaDB pass on each.
